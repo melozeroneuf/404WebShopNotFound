@@ -79,3 +79,139 @@
     font-size: 14px;
     color: gray;
 }
+
+/* ===== PRODUCTS (INDEX) ===== */
+
+.main {
+    min-height: 60vh;
+}
+
+.new-products {
+    padding: 70px 24px 30px;
+}
+
+.new-products-title {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    font-size: 40px;
+    font-weight: 800;
+    margin: 0 0 55px;
+}
+
+.product-grid {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(260px, 1fr));
+    gap: 80px;
+    align-items: start;
+}
+
+@media (max-width: 1100px) {
+    .product-grid {
+        grid-template-columns: repeat(2, minmax(260px, 1fr));
+        gap: 50px;
+    }
+}
+
+@media (max-width: 700px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+}
+
+.product-card {
+    position: relative;
+    text-align: center;
+}
+
+.product-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.badge-new {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 0 18px;
+    border-radius: 999px;
+    background: #2db84d;
+    color: #000;
+    font-family: Arial, sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+}
+
+.wishlist-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 0;
+    background: #f2f2f2;
+    color: #777;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wishlist-btn i {
+    font-size: 22px;
+}
+
+.product-image {
+    width: 100%;
+    max-width: 360px;
+    height: auto;
+    margin: 10px auto 25px;
+    display: block;
+}
+
+.product-title {
+    font-family: Arial, sans-serif;
+    font-weight: 800;
+    font-size: 26px;
+    margin: 0;
+    line-height: 1.25;
+}
+
+/* ===== SWIPER (Neue Artikel) ===== */
+
+.mySwiper {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 10px 70px 40px;
+    position: relative;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+    z-index: 10;
+}
+
+.mySwiper .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.mySwiper .swiper-slide img {
+    width: 100%;
+    max-width: 260px;
+    height: auto;
+}
+
+@media (max-width: 768px) {
+    .mySwiper {
+        padding: 10px 40px 30px;
+    }
+
+    .mySwiper .swiper-slide img {
+        max-width: 220px;
+    }
+}
