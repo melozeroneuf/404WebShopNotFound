@@ -42,3 +42,40 @@
 .navigation a:hover {
     background-color: lightgray;
 }
+
+/* ===== FOOTER ===== */
+
+.footer {
+    background-color: #f5f5f5;
+    border-top: 2px solid lightgray;
+    margin-top: 50px;
+    padding: 20px 30px;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Links linksbündig */
+.footer-links {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+/* Info rechts */
+.footer-info {
+    font-size: 14px;
+    color: gray;
+}
