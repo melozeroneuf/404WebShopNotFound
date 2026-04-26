@@ -1,0 +1,44 @@
+/* ===== HEADER ===== */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
+
+    padding: 12px 32px;
+    border-bottom: 3px solid lightgray;
+    border-radius: 4px;
+}
+
+.header > div,
+.header > nav {
+    flex: 1;
+}
+
+.logo {
+    width: 240px;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+}
+
+.navigation {
+    display: flex;
+    gap: 20px;
+}
+
+.navigation a {
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
+    font-family: Arial, sans-serif;
+    padding: 8px 14px;
+    border-radius: 8px;
+}
+
+.navigation a:hover {
+    background-color: lightgray;
+}
