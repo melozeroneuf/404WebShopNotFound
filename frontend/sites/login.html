@@ -1,10 +1,171 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Login</title>
+
+    <link rel="stylesheet" href="../res/css/style.css">
 </head>
+
 <body>
+
+<main class="login-page">
+
+    <section class="login-card">
+
+        <div class="login-image">
+            <img src="../img/login-chrome.png" alt="Login Illustration">
+        </div>
+
+        <div class="login-form-box">
+
+            <h2 id="formTitle">Anmelden</h2>
+
+            <p class="login-subtitle" id="formSubtitle">
+                Melde dich mit deinem Konto an.
+            </p>
+
+            <!-- LOGIN FORM -->
+            <form id="loginForm">
+
+                <input type="hidden" name="action" value="login">
+
+                <div class="form-group">
+                    <label for="login">E-Mail oder Benutzername</label>
+
+                    <input
+                            type="text"
+                            id="login"
+                            name="login"
+                            placeholder="E-Mail oder Username"
+                            required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Passwort</label>
+
+                    <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Passwort"
+                            required
+                    >
+                </div>
+
+                <button type="submit" class="login-btn">
+                    Einloggen
+                </button>
+
+                <p class="register-text">
+                    Noch kein Konto?
+
+                    <a href="#" id="showRegister">
+                        Jetzt registrieren
+                    </a>
+                </p>
+
+            </form>
+
+            <!-- REGISTER FORM -->
+            <form id="registerForm" class="hidden-form">
+
+                <input type="hidden" name="action" value="register">
+
+                <div class="form-group">
+                    <label for="regUsername">Benutzername</label>
+
+                    <input
+                            type="text"
+                            id="regUsername"
+                            name="username"
+                            placeholder="Benutzername"
+                            required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="regEmail">E-Mail</label>
+
+                    <input
+                            type="email"
+                            id="regEmail"
+                            name="email"
+                            placeholder="E-Mail"
+                            required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="regPassword">Passwort</label>
+
+                    <input
+                            type="password"
+                            id="regPassword"
+                            name="password"
+                            placeholder="Passwort"
+                            required
+                    >
+                </div>
+
+                <button type="submit" class="login-btn">
+                    Registrieren
+                </button>
+
+                <p class="register-text">
+                    Schon ein Konto?
+
+                    <a href="#" id="showLogin">
+                        Einloggen
+                    </a>
+                </p>
+
+            </form>
+
+        </div>
+
+    </section>
+
+</main>
+
+<script>
+
+    const loginForm = document.getElementById("loginForm");
+    const registerForm = document.getElementById("registerForm");
+
+    const showRegister = document.getElementById("showRegister");
+    const showLogin = document.getElementById("showLogin");
+
+    const formTitle = document.getElementById("formTitle");
+    const formSubtitle = document.getElementById("formSubtitle");
+
+    showRegister.addEventListener("click", function (event) {
+
+        event.preventDefault();
+
+        loginForm.style.display = "none";
+        registerForm.style.display = "block";
+
+        formTitle.innerText = "Registrieren";
+        formSubtitle.innerText = "Erstelle dein neues Konto.";
+
+    });
+
+    showLogin.addEventListener("click", function (event) {
+
+        event.preventDefault();
+
+        registerForm.style.display = "none";
+        loginForm.style.display = "block";
+
+        formTitle.innerText = "Anmelden";
+        formSubtitle.innerText = "Melde dich mit deinem Konto an.";
+
+    });
+
+</script>
 
 </body>
 </html>
