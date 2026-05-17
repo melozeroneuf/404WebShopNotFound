@@ -299,6 +299,45 @@
     background: #333;
 }
 
+.remember-box {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 4px 0 14px;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.remember-box input[type="checkbox"] {
+    appearance: none;
+    width: 17px;
+    height: 17px;
+    border: 1.5px solid #bdbdbd;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.remember-box input[type="checkbox"]:checked {
+    background: #111;
+    border-color: #111;
+}
+
+.remember-box input[type="checkbox"]:checked::after {
+    content: "✓";
+    position: absolute;
+    color: white;
+    font-size: 12px;
+    left: 3px;
+    top: -1px;
+}
+
+.remember-box label {
+    cursor: pointer;
+    user-select: none;
+}
+
 .register-text {
     margin-top: 25px;
     text-align: center;

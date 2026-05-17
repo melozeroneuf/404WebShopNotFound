@@ -6,6 +6,7 @@
     <title>Login</title>
 
     <link rel="stylesheet" href="../res/css/style.css">
+    <link rel="stylesheet" href="/404webshopnotfound/frontend/res/css/style.css">
 </head>
 
 <body>
@@ -53,6 +54,20 @@
                             placeholder="Passwort"
                             required
                     >
+                </div>
+
+                <div class="remember-box">
+
+                    <input
+                            type="checkbox"
+                            id="rememberMe"
+                            name="remember"
+                    >
+
+                    <label for="rememberMe">
+                        Login merken
+                    </label>
+
                 </div>
 
                 <button type="submit" class="login-btn">
@@ -167,5 +182,7 @@
 
 </script>
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="../js/auth.js"></script>
 </body>
 </html>

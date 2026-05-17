@@ -7,6 +7,19 @@ class User {
         $this->conn = $dbConnection;
     }
 
+    public function register(string $username, string $email, string $password): bool {
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        $sql = "INSERT INTO users (username, email, password, role) VALUES (:username, :email, :password, 'customer')";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(":username", $username);
+        $stmt->bindParam(":email", $email);
+        $stmt->bindParam(":password", $hashedPassword);
+
+        return $stmt->execute();
+    }
+
     public function findByEmailOrUsername(string $login): ?array {
         $sql = "SELECT * FROM users 
                 WHERE email = :login OR username = :login 

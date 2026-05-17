@@ -31,8 +31,8 @@
         </div>
 
         <!-- Navigation (rechts) -->
-        <nav class="navigation">
-            <a href="sites/login.html">Login</a>
+        <nav class="navigation" id="navigation">
+            <a href="sites/login.html" id="loginLink" >Login</a>
             <a href="sites/konto.html">Konto</a>
             <a href="sites/warenkorb.html">Warenkorb</a>
         </nav>
@@ -174,13 +174,6 @@
         <div class="swiper-button-next"></div>
         <div class="swiper-button-prev"></div>
 
-        <h2>Backend-Test</h2>
-
-        <p id="dbStatus">DB wird geprüft...</p>
-        <p id="jsonStatus">JSON wird geprüft...</p>
-
-        <button id="jsonTestBtn">JSON Test</button>
-
     </div>
 </main>
 
@@ -231,7 +224,8 @@
         });
     </script>
 
-    <script src="js/script.js"></script>    
+<script src="js/script.js"></script>
+<script src="js/navbar.js"></script>
 </body>
  
 </html>

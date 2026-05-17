@@ -18,14 +18,79 @@ if (!$input) {
 }
 
 $action = $input["action"] ?? "";
-if ($action === "test") {
-    echo json_encode([
-        "success" => true,
-        "message" => "JSON-Kommunikation funktioniert",
-        "receivedData" => $input
-    ]);
-    exit;
+
+// Register
+
+if($action === "register"){
+    $username = trim($input["username"] ?? "");
+    $email = trim($input["email"] ?? "");
+    $password = trim($input["password"] ?? "");
+
+
+    if($username === "" || $email === "" || $password === ""){
+        echo json_encode([
+            "success" => false,
+            "message" => "Bitte alle Felder ausfüllen"
+        ]);
+        exit();
+    }
+
+    if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+        echo json_encode([
+            "success" => false,
+            "message" => "Ungültige E-Mail-Adresse"
+        ]);
+        exit();
+    }
+
+    $dbAccess = new DBAccess();
+    $db = $dbAccess->connect();
+
+    $userModel = new User($db);
+
+    try{
+        $created = $userModel->register($username, $email, $password);
+
+        if($created){
+
+            $user = $userModel->findByEmailOrUsername($email);
+
+            $_SESSION["user_id"] = $user["id"];
+            $_SESSION["username"] = $user["username"];
+            $_SESSION["role"] = $user["role"];
+
+            echo json_encode([
+                "success" => true,
+                "message" => "Registrierung erfolgreich, du bist jetzt eingeloggt",
+                "user" => [
+                    "id" => $user["id"],
+                    "username" => $user["username"],
+                    "email" => $user["email"],
+                    "role" => $user["role"]
+                ]
+            ]);
+            exit();
+        }
+
+        echo json_encode([
+            "success" => false,
+            "message" => "Registrierung fehlgeschlagen"
+        ]);
+        exit();
+
+    }catch (PDOException $e){
+        echo json_encode([
+            "success" => false,
+            "message" => "Der Username oder E-Mail existiert bereits"
+        ]);
+        exit();
+    }
 }
+
+
+
+
+// Login
 
 if ($action === "login") {
     $login = trim($input["login"] ?? "");
@@ -75,6 +140,8 @@ if ($action === "login") {
     exit;
 }
 
+//Logout
+
 if ($action === "logout") {
     session_destroy();
     setcookie("remember_user", "", time() - 3600, "/");
@@ -85,6 +152,8 @@ if ($action === "logout") {
     ]);
     exit;
 }
+
+//Wenn unbekannter Fehler kommt
 
 echo json_encode([
     "success" => false,
