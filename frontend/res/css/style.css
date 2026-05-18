@@ -188,9 +188,9 @@
 /* ===== SWIPER (Neue Artikel) ===== */
 
 .mySwiper {
-    max-width: 1300px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 10px 70px 40px;
+    padding: 10px 90px 40px;
     position: relative;
 }
 
@@ -202,57 +202,81 @@
 .mySwiper .swiper-slide {
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-}
-
-.mySwiper .swiper-slide img {
-    width: 100%;
-    max-width: 260px;
+    align-items: stretch;
     height: auto;
 }
 
 .slide-product {
+    width: 320px;
+    min-height: 720px;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 8px;
-    height: 100%;
+}
+
+.slide-product-top {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.slide-product-image {
+    width: 240px;
+    height: 240px;
+    object-fit: contain;
+    margin-bottom: 20px;
 }
 
 .slide-product-title {
-    min-height: 72px;
-    color: #111;
+    height: 180px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    font-size: 24px;
+    line-height: 1.2;
     font-weight: 900;
+    margin: 0;
 }
 
 .slide-product-meta {
-    margin-bottom: 4px;
+    height: 40px;
+    margin: 0;
+}
+
+.slide-product-price {
+    height: 40px;
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
 }
 
 .slide-product-actions {
+    margin-top: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     width: 100%;
-    margin-top: auto;
 }
 
 .add-to-cart-btn {
-    width: 100%;
-    max-width: 220px;
+    width: 230px;
+    height: 50px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 700;
     background: linear-gradient(180deg, #f2f2f2 0%, #d9d9d9 100%);
     border: 1px solid #cfcfcf;
     color: #111;
-    font-weight: 600;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
 }
 
 .add-to-cart-btn:hover {
     background: linear-gradient(180deg, #ffffff 0%, #e0e0e0 100%);
-    border-color: #bdbdbd;
-    color: #111;
 }
 
 .slide-product-note {
@@ -263,9 +287,12 @@
     .mySwiper {
         padding: 10px 40px 30px;
     }
-
-    .mySwiper .swiper-slide img {
-        max-width: 220px;
+    .slide-product {
+        width: 100%;
+        min-height: auto;
+    }
+    .slide-product-title {
+        height: auto;
     }
 }
 
