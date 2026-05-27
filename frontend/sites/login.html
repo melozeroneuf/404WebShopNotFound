@@ -28,7 +28,7 @@
             </p>
 
             <!-- LOGIN FORM -->
-            <form id="loginForm">
+            <form id="loginForm" method="post" action="javascript:void(0)">
 
                 <input type="hidden" name="action" value="login">
 
@@ -74,6 +74,8 @@
                     Einloggen
                 </button>
 
+                <div id="loginMessage" class="auth-message"></div>
+
                 <p class="register-text">
                     Noch kein Konto?
 
@@ -85,7 +87,7 @@
             </form>
 
             <!-- REGISTER FORM -->
-            <form id="registerForm" class="hidden-form">
+            <form id="registerForm" class="hidden-form" method="post" action="javascript:void(0)">
 
                 <input type="hidden" name="action" value="register">
 
@@ -128,6 +130,8 @@
                 <button type="submit" class="login-btn">
                     Registrieren
                 </button>
+
+                <div id="registerMessage" class="auth-message"></div>
 
                 <p class="register-text">
                     Schon ein Konto?
@@ -181,8 +185,7 @@
     });
 
 </script>
-
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="../js/auth.js"></script>
+<script src="../js/auth.js?v=20"></script>
 </body>
 </html>

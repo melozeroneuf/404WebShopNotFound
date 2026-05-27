@@ -429,6 +429,27 @@
     text-decoration: none;
 }
 
+.auth-message {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    display: none;
+}
+
+.auth-message.success {
+    background: #e8f8ee;
+    color: #157347;
+    border: 1px solid #badbcc;
+}
+
+.auth-message.error {
+    background: #fdeaea;
+    color: #b02a37;
+    border: 1px solid #f5c2c7;
+}
+
 /* ===== Cart ===== */
 
 .cart-page {

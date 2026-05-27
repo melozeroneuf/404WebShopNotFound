@@ -22,16 +22,32 @@ $(document).ready(function () {
             }),
             success: function (response) {
                 console.log("Backend Antwort:", response);
-                alert(response.message);
+
+                const messageBox = $("#registerMessage");
+
+                messageBox
+                    .removeClass("success error")
+                    .addClass(response.success ? "success" : "error")
+                    .text(response.message)
+                    .fadeIn();
 
                 if (response.success) {
-                    window.location.href = "../index.html";
+                    setTimeout(() => {
+                        window.location.href = "../index.html";
+                    }, 1200);
                 }
             },
             error: function (xhr) {
                 console.log("Fehler vom Backend:");
                 console.log(xhr.responseText);
-                alert("Fehler bei der Registrierung");
+
+                const messageBox = $("#registerMessage");
+
+                messageBox
+                    .removeClass("success")
+                    .addClass("error")
+                    .text("Fehler bei der Registrierung")
+                    .fadeIn();
             }
         });
     });
@@ -51,23 +67,38 @@ $(document).ready(function () {
                 action: "login",
                 login: $("#login").val(),
                 password: $("#password").val(),
-                remember: $("rememberMe").is(":checked")
+                remember: $("#rememberMe").is(":checked")
             }),
 
             success: function (response) {
 
-                alert(response.message);
+                const messageBox = $("#loginMessage");
+
+                messageBox
+                    .removeClass("success error")
+                    .addClass(response.success ? "success" : "error")
+                    .text(response.message)
+                    .fadeIn();
 
                 if(response.success){
 
-                    window.location.href = "../index.html";
+                    setTimeout(() => {
+                        window.location.href = "../index.html";
+                    }, 1200);
                 }
             },
 
             error: function (xhr) {
 
                 console.log(xhr.responseText);
-                alert("Fehler beim Login");
+
+                const messageBox = $("#loginMessage");
+
+                messageBox
+                    .removeClass("success")
+                    .addClass("error")
+                    .text("Fehler beim Login")
+                    .fadeIn();
             }
         });
     });
