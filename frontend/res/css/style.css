@@ -598,6 +598,57 @@
 
 }
 
+.cart-quantity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 12px 0;
+}
+
+.cart-quantity button {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 8px;
+    background: #111;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.cart-quantity button:hover,
+.cart-clear:hover,
+.cart-back:hover,
+.cart-checkout:hover {
+    transform: translateY(-2px);
+    opacity: 0.85;
+}
+
+.cart-quantity span {
+    min-width: 24px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.cart-clear {
+    margin-top: 12px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 12px;
+    background: #f1f1f1;
+    color: #111;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.cart-checkout,
+.cart-back {
+    border-radius: 12px;
+    font-weight: 700;
+    transition: 0.2s ease;
+}
+
 /* ===== Konto ===== */
 
 .account-page {

@@ -102,7 +102,7 @@ if ($action === "login") {
             "success" => false,
             "message" => "Login und Passwort müssen ausgefüllt sein"
         ]);
-        exit;
+        exit();
     }
 
     $dbAccess = new DBAccess();
@@ -130,19 +130,22 @@ if ($action === "login") {
                 "role" => $user["role"]
             ]
         ]);
-        exit;
+        exit();
     }
 
     echo json_encode([
         "success" => false,
         "message" => "Login fehlgeschlagen"
     ]);
-    exit;
+    exit();
 }
 
 //Logout
 
 if ($action === "logout") {
+
+    $_SESSION["cart"] = [];
+
     session_destroy();
     setcookie("remember_user", "", time() - 3600, "/");
 
@@ -150,7 +153,7 @@ if ($action === "logout") {
         "success" => true,
         "message" => "Logout erfolgreich"
     ]);
-    exit;
+    exit();
 }
 
 //Wenn unbekannter Fehler kommt
