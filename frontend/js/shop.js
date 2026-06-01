@@ -9,6 +9,14 @@ const products = {
     6: { id: 6, name: "Mint Crunch", price: 5.80 }
 };
 
+const cartHandlerUrl = (() => {
+    const path = window.location.pathname;
+    if (path.includes("/frontend/sites/")) {
+        return "../../backend/logic/cartHandler.php";
+    }
+    return "../backend/logic/cartHandler.php";
+})();
+
 document.querySelectorAll(".add-to-cart-btn").forEach(button => {
     button.addEventListener("click", function () {
         console.log("Button geklickt");
@@ -18,7 +26,7 @@ document.querySelectorAll(".add-to-cart-btn").forEach(button => {
 
         console.log(product);
 
-        fetch("../backend/logic/cartHandler.php", {
+        fetch(cartHandlerUrl, {
             method: "POST",
             credentials: "same-origin",
             headers: {

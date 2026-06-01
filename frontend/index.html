@@ -32,9 +32,14 @@
 
         <!-- Navigation (rechts) -->
         <nav class="navigation" id="navigation">
+            <a href="sites/produkte.html">Produkte</a>
             <a href="sites/login.html" id="loginLink" >Login</a>
             <a href="sites/konto.html">Konto</a>
             <a href="sites/warenkorb.html">Warenkorb</a>
+            <a href="sites/merkliste.html" class="wishlist-link" aria-label="Merkliste">
+                <i class="bi bi-heart"></i>
+                <span class="wishlist-count" id="wishlistCount">0</span>
+            </a>
         </nav>
 
     </header>
@@ -48,7 +53,7 @@
                 <div class="slide-product">
                     <div class="slide-product-top">
                         <span class="badge-new">Neu</span>
-                        <button class="wishlist-btn" type="button" aria-label="Auf die Merkliste">
+                        <button class="wishlist-btn" type="button" aria-label="Auf die Merkliste" data-item-id="1">
                             <i class="bi bi-heart"></i>
                         </button>
                     </div>
@@ -72,7 +77,7 @@
                 <div class="slide-product">
                     <div class="slide-product-top">
                         <span class="badge-new">Neu</span>
-                        <button class="wishlist-btn" type="button" aria-label="Auf die Merkliste">
+                        <button class="wishlist-btn" type="button" aria-label="Auf die Merkliste" data-item-id="2">
                             <i class="bi bi-heart"></i>
                         </button>
                     </div>
@@ -96,7 +101,7 @@
                 <div class="slide-product">
                     <div class="slide-product-top">
                         <span class="badge-new">Neu</span>
-                        <button class="wishlist-btn" type="button" aria-label="Auf die Merkliste">
+                        <button class="wishlist-btn" type="button" aria-label="Auf die Merkliste" data-item-id="3">
                             <i class="bi bi-heart"></i>
                         </button>
                     </div>
@@ -120,7 +125,7 @@
                 <div class="slide-product">
                     <div class="slide-product-top">
                         <span class="badge-new">Neu</span>
-                        <button class="wishlist-btn" type="button" aria-label="Auf die Merkliste">
+                        <button class="wishlist-btn" type="button" aria-label="Auf die Merkliste" data-item-id="4">
                             <i class="bi bi-heart"></i>
                         </button>
                     </div>
@@ -144,7 +149,7 @@
                 <div class="slide-product">
                     <div class="slide-product-top">
                         <span class="badge-new">Neu</span>
-                        <button class="wishlist-btn" type="button" aria-label="Auf die Merkliste">
+                        <button class="wishlist-btn" type="button" aria-label="Auf die Merkliste" data-item-id="5">
                             <i class="bi bi-heart"></i>
                         </button>
                     </div>
@@ -168,7 +173,7 @@
                 <div class="slide-product">
                     <div class="slide-product-top">
                         <span class="badge-new">Neu</span>
-                        <button class="wishlist-btn" type="button" aria-label="Auf die Merkliste">
+                        <button class="wishlist-btn" type="button" aria-label="Auf die Merkliste" data-item-id="6">
                             <i class="bi bi-heart"></i>
                         </button>
                     </div>
@@ -243,6 +248,7 @@
     </script>
 
 <script src="js/shop.js"></script>
+<script src="js/wishlist.js"></script>
 <script src="js/navbar.js"></script>
 </body>
  
