@@ -25,6 +25,7 @@ const productCatalog = {
         title: "JUAN LAURA Schokoladen | Kakaomasse<br>Peru »Pichari – Chuncho« 100% | 70g",
         meta: "<strong>Inhalt:</strong> 0.07 kg (141,43 € / 1 kg)",
         price: "9,90 €",
+        rating: 5,
         image: "../img/schoko1.png",
         alt: "Schoko 1"
     },
@@ -41,6 +42,7 @@ const productCatalog = {
         title: "PUMATIY Schokolade | Kakaomasse<br>Zeremonieller Kakao Peru »Cusco – Chuncho« 100% | 100g",
         meta: "<strong>Inhalt:</strong> 0.1 kg (149,00 € / 1 kg)",
         price: "14,90 €",
+        rating: 5,
         image: "../img/schoko3.png",
         alt: "PUMATIY Schokolade | Kakaomasse"
     },
@@ -65,6 +67,9 @@ const productCatalog = {
         title: "CHOCOLATE &amp; Love | Dunkle Schokolade &amp; Minze »Mint Crunch« 67% | BIO | 80g",
         meta: "<strong>Inhalt:</strong> 0.08 kg (72,50 € / 1 kg)",
         price: "5,80 €",
+        priceOld: "7,60 €",
+        savings: "(23,68% gespart)",
+        isSale: true,
         image: "../img/schoko6.png",
         alt: "CHOCOLATE &amp; Love Dunkle Schokolade &amp; Minze"
     }
@@ -128,6 +133,27 @@ function renderWishlistPage(items) {
         .map(itemId => productCatalog[itemId])
         .filter(Boolean)
         .map(product => {
+            const ratingMarkup = product.rating
+                ? `
+                    <div class="rating-stars" aria-label="Bewertung: ${product.rating} von 5 Sternen">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                `
+                : "";
+            const saleBadge = product.isSale ? "<span class=\"badge-sale\" aria-label=\"Sale\">%</span>" : "";
+            const priceMarkup = product.isSale
+                ? `
+                    <p class="slide-product-price slide-product-price--sale">
+                        <span class="price-current">${product.price}</span>
+                        <span class="price-old">${product.priceOld}</span>
+                    </p>
+                    <p class="price-savings">${product.savings}</p>
+                `
+                : `<p class="slide-product-price">${product.price}</p>`;
             return `
                 <div class="slide-product">
                     <div class="slide-product-top">
@@ -136,10 +162,12 @@ function renderWishlistPage(items) {
                             &times;
                         </button>
                     </div>
+                    ${saleBadge}
                     <img src="${product.image}" class="img-fluid slide-product-image" alt="${product.alt}">
+                    ${ratingMarkup}
                     <h3 class="slide-product-title">${product.title}</h3>
                     <p class="slide-product-meta">${product.meta}</p>
-                    <p class="slide-product-price">${product.price}</p>
+                    ${priceMarkup}
                     <div class="slide-product-actions">
                         <button class="btn btn-dark add-to-cart-btn" data-item-id="${product.id}" type="button">In den Warenkorb</button>
                         <a class="slide-product-note" href="#">Preise inkl. MwSt. zzgl. Versandkosten</a>
