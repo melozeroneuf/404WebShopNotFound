@@ -18,6 +18,9 @@ const cartHandlerUrl = (() => {
 })();
 
 document.querySelectorAll(".add-to-cart-btn").forEach(button => {
+    if (button.dataset.soldOut === "true") {
+        return;
+    }
     button.addEventListener("click", function () {
         console.log("Button geklickt");
 

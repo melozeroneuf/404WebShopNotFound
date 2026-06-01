@@ -93,6 +93,10 @@ function updateWishlistIcon(button, isActive) {
     icon.classList.toggle("bi-heart-fill", isActive);
 }
 
+function isSoldOut(button) {
+    return button.dataset.soldOut === "true";
+}
+
 function applyWishlistState(items) {
     const itemSet = new Set(items);
     document.querySelectorAll(".wishlist-btn").forEach(button => {
@@ -186,6 +190,10 @@ async function fetchWishlist(action, itemId) {
 }
 
 function toggleWishlist(button) {
+    if (isSoldOut(button)) {
+        return;
+    }
+
     const itemId = button.dataset.itemId;
     if (!itemId) {
         console.warn("Wishlist ohne item id:", button);
@@ -229,6 +237,10 @@ function initWishlistButtons() {
     applyWishlistState(items);
 
     document.querySelectorAll(".wishlist-btn").forEach(button => {
+        if (isSoldOut(button)) {
+            button.setAttribute("aria-disabled", "true");
+            return;
+        }
         button.addEventListener("click", () => {
             toggleWishlist(button);
         });

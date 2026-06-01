@@ -331,6 +331,21 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
 }
 
+.badge-soldout {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 0 20px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #ff4b4b 0%, #cc1f1f 100%);
+    color: #fff;
+    font-family: Arial, sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.14);
+}
+
 .wishlist-btn {
     width: 44px;
     height: 44px;
@@ -341,6 +356,11 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+}
+
+.wishlist-btn[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .wishlist-btn i {
@@ -459,6 +479,11 @@
     transform: translateY(6px);
     pointer-events: none;
     transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.add-to-cart-btn[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .add-to-cart-btn:hover {
