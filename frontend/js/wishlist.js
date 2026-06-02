@@ -1,21 +1,14 @@
 console.log("wishlist.js wurde geladen");
 
 const wishlistStorageKey = "wishlistItems";
-const wishlistHandlerUrl = (() => {
-    const path = window.location.pathname;
-    if (path.includes("/frontend/sites/")) {
-        return "../../backend/logic/wishlistHandler.php";
-    }
-    return "../backend/logic/wishlistHandler.php";
-})();
 
-const checkLoginUrl = (() => {
-    const path = window.location.pathname;
-    if (path.includes("/frontend/sites/")) {
-        return "../../backend/logic/checkLogin.php";
-    }
-    return "../backend/logic/checkLogin.php";
-})();
+const wishlistHandlerUrl = window.location.pathname.includes("/frontend/sites/")
+    ? "../../backend/logic/wishlistHandler.php"
+    : "backend/logic/wishlistHandler.php";
+
+const checkLoginUrl = window.location.pathname.includes("/frontend/sites/")
+    ? "../../backend/logic/checkLogin.php"
+    : "backend/logic/checkLogin.php";
 
 let isUserLoggedIn = false;
 
@@ -264,14 +257,18 @@ function initWishlistButtons() {
     const items = getWishlistItems();
     applyWishlistState(items);
 
-    document.querySelectorAll(".wishlist-btn").forEach(button => {
-        if (isSoldOut(button)) {
-            button.setAttribute("aria-disabled", "true");
+    document.addEventListener("click", function (event) {
+        const button = event.target.closest(".wishlist-btn");
+
+        if (!button) {
             return;
         }
-        button.addEventListener("click", () => {
-            toggleWishlist(button);
-        });
+
+        if (isSoldOut(button)) {
+            return;
+        }
+
+        toggleWishlist(button);
     });
 
     const wishlistContainer = document.getElementById("wishlistItems");

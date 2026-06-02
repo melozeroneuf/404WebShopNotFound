@@ -1,58 +1,53 @@
 console.log("shop.js wurde geladen");
 
-const products = {
-    1: { id: 1, name: "JUAN LAURA Schokoladen", price: 9.90 },
-    2: { id: 2, name: "PUMATIY Chili", price: 9.90 },
-    3: { id: 3, name: "PUMATIY Kakaomasse", price: 14.90 },
-    4: { id: 4, name: "KUYAY Blaubeeren", price: 9.90 },
-    5: { id: 5, name: "FJAK Belize", price: 14.90 },
-    6: { id: 6, name: "Mint Crunch", price: 5.80 }
-};
+const cartHandlerUrl = window.location.pathname.includes("/frontend/sites/")
+    ? "../../backend/logic/cartHandler.php"
+    : "../backend/logic/cartHandler.php";
 
-const cartHandlerUrl = (() => {
-    const path = window.location.pathname;
-    if (path.includes("/frontend/sites/")) {
-        return "../../backend/logic/cartHandler.php";
-    }
-    return "../backend/logic/cartHandler.php";
-})();
+document.addEventListener("click", function (event) {
+    const button = event.target.closest(".add-to-cart-btn");
 
-document.querySelectorAll(".add-to-cart-btn").forEach(button => {
-    if (button.dataset.soldOut === "true") {
-        return;
-    }
-    button.addEventListener("click", function () {
-        console.log("Button geklickt");
+    if (!button) return;
+    if (button.dataset.soldOut === "true") return;
 
-        const id = this.dataset.itemId;
-        const product = products[id];
+    const card = button.closest(".slide-product");
 
-        console.log(product);
+    const id = button.dataset.itemId;
+    const name = card.querySelector(".slide-product-title").innerText;
 
-        fetch(cartHandlerUrl, {
-            method: "POST",
-            credentials: "same-origin",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                action: "add",
-                id: product.id,
-                name: product.name,
-                price: product.price
-            })
+    let priceText = card.querySelector(".price-current")
+        ? card.querySelector(".price-current").innerText
+        : card.querySelector(".slide-product-price").innerText;
+
+    const price = parseFloat(
+        priceText.replace("€", "").replace(",", ".").trim()
+    );
+
+    fetch(cartHandlerUrl, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            action: "add",
+            id: id,
+            name: name,
+            price: price
         })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Backend Antwort:", data);
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Warenkorb Antwort:", data);
 
-                if (data.success) {
-                    alert("Produkt wurde zum Warenkorb hinzugefügt");
-                }
-            })
-            .catch(error => {
-                console.error("Fehler:", error);
-                alert("Fehler beim Hinzufügen");
-            });
-    });
+            if (data.success) {
+                button.innerText = "Hinzugefügt";
+                setTimeout(() => {
+                    button.innerText = "In den Warenkorb";
+                }, 1000);
+            }
+        })
+        .catch(error => {
+            console.error("Warenkorb Fehler:", error);
+        });
 });

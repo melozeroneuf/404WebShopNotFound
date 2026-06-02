@@ -35,10 +35,12 @@ function showCart() {
 }
 
 function renderCart(cart) {
+
     const cartDiv = document.getElementById("cart");
     const summary = document.querySelector(".cart-summary strong");
 
     if (!cart || cart.length === 0) {
+
         cartDiv.innerHTML = "<p>Dein Warenkorb ist leer.</p>";
         summary.innerText = "0,00 EUR";
         return;
@@ -48,37 +50,66 @@ function renderCart(cart) {
     let total = 0;
 
     cart.forEach(item => {
-        const itemTotal = item.price * item.quantity;
+
+        const price = parseFloat(item.price);
+        const quantity = parseInt(item.quantity);
+
+        const itemTotal = price * quantity;
+
         total += itemTotal;
 
         html += `
             <div class="cart-item">
+
                 <h3>${item.name}</h3>
-                <p>Preis: ${item.price.toFixed(2)} €</p>
+
+                <p>Preis: ${price.toFixed(2)} €</p>
 
                 <div class="cart-quantity">
-                    <button type="button" onclick="sendCartAction('decrease', ${item.id})">-</button>
-                    <span>${item.quantity}</span>
-                    <button type="button" onclick="sendCartAction('increase', ${item.id})">+</button>
+
+                    <button type="button"
+                        onclick="sendCartAction('decrease', ${item.id})">
+                        -
+                    </button>
+
+                    <span>${quantity}</span>
+
+                    <button type="button"
+                        onclick="sendCartAction('increase', ${item.id})">
+                        +
+                    </button>
+
                 </div>
 
-                <p><strong>Zwischensumme: ${itemTotal.toFixed(2)} €</strong></p>
+                <p>
+                    <strong>
+                        Zwischensumme: ${itemTotal.toFixed(2)} €
+                    </strong>
+                </p>
+
             </div>
+
             <hr>
         `;
     });
 
     html += `
-        <button type="button" class="cart-clear" onclick="sendCartAction('clear')">
+        <button type="button"
+            class="cart-clear"
+            onclick="sendCartAction('clear')">
+
             Warenkorb leeren
+
         </button>
     `;
 
     cartDiv.innerHTML = html;
-    summary.innerText = total.toFixed(2).replace(".", ",") + " EUR";
+
+    summary.innerText =
+        total.toFixed(2).replace(".", ",") + " EUR";
 }
 
-document.addEventListener("DOMContentLoaded", function (){
+document.addEventListener("DOMContentLoaded", function () {
     console.log("DOM geladen");
     showCart();
 });

@@ -4,101 +4,196 @@ session_start();
 
 header("Content-Type: application/json");
 
-$input = json_decode(file_get_contents("php://input"), true);
+require_once "../config/dbaccess.php";
 
+$input = json_decode(file_get_contents("php://input"), true);
 $action = $input["action"] ?? "";
 
-if(!isset($_SESSION["cart"])){
+if (!isset($_SESSION["cart"])) {
     $_SESSION["cart"] = [];
 }
 
-if($action === "add"){
+$isLoggedIn = isset($_SESSION["user_id"]);
+$userId = $isLoggedIn ? (int) $_SESSION["user_id"] : null;
 
-    $product = [
-        "id" => $input["id"],
-        "name" => $input["name"],
-        "price" => $input["price"],
-        "quantity" => 1
-    ];
+$dbAccess = new DBAccess();
+$db = $dbAccess->connect();
 
-    $found = false;
+function getSessionCart(): array {
+    return $_SESSION["cart"] ?? [];
+}
+
+function getDbCart(PDO $db, int $userId): array {
+    $stmt = $db->prepare("SELECT product_id AS id, name, price, quantity FROM cart_items WHERE user_id = :userId ORDER BY id DESC");
+    $stmt->bindParam(":userId", $userId, PDO::PARAM_INT);
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getCurrentCart(PDO $db, bool $isLoggedIn, ?int $userId): array {
+    if ($isLoggedIn && $userId !== null) {
+        return getDbCart($db, $userId);
+    }
+
+    return getSessionCart();
+}
+
+function addToSessionCart(array $input): void {
+    $id = $input["id"];
+    $name = $input["name"];
+    $price = (float) $input["price"];
 
     foreach ($_SESSION["cart"] as &$item) {
-
-        if($item["id"] == $product["id"]){
+        if ($item["id"] == $id) {
             $item["quantity"]++;
-            $found = true;
-            break;
+            return;
         }
     }
 
-        if (!$found) {
-            $_SESSION["cart"][] = $product;
-        }
+    $_SESSION["cart"][] = [
+        "id" => $id,
+        "name" => $name,
+        "price" => $price,
+        "quantity" => 1
+    ];
+}
 
-        echo json_encode([
-            "success" => true,
-            "cart" => $_SESSION["cart"]
-        ]);
+function addToDbCart(PDO $db, int $userId, array $input): void {
+    $productId = (int) $input["id"];
+    $name = $input["name"];
+    $price = (float) $input["price"];
 
-        exit();
-    }
+    $stmt = $db->prepare("
+        INSERT INTO cart_items (user_id, product_id, name, price, quantity)
+        VALUES (:userId, :productId, :name, :price, 1)
+        ON DUPLICATE KEY UPDATE quantity = quantity + 1
+    ");
 
-    if ($action === "get"){
+    $stmt->bindParam(":userId", $userId, PDO::PARAM_INT);
+    $stmt->bindParam(":productId", $productId, PDO::PARAM_INT);
+    $stmt->bindParam(":name", $name);
+    $stmt->bindParam(":price", $price);
+    $stmt->execute();
+}
 
-        echo json_encode([
-            "success" => true,
-            "cart" => $_SESSION["cart"]
-        ]);
+function changeSessionQuantity($id, int $change): void {
+    foreach ($_SESSION["cart"] as $index => &$item) {
+        if ($item["id"] == $id) {
+            $item["quantity"] += $change;
 
-        exit();
-    }
-
-    if ($action === "increase") {
-        $id = $input["id"];
-
-        foreach ($_SESSION["cart"] as &$item) {
-            if ($item["id"] == $id) {
-                $item["quantity"]++;
-                break;
+            if ($item["quantity"] <= 0) {
+                array_splice($_SESSION["cart"], $index, 1);
             }
-        }
 
-        echo json_encode([
-            "success" => true,
-            "cart" => $_SESSION["cart"]
-        ]);
-        exit;
+            return;
+        }
+    }
+}
+
+function changeDbQuantity(PDO $db, int $userId, int $productId, int $change): void {
+    if ($change > 0) {
+        $stmt = $db->prepare("
+            UPDATE cart_items 
+            SET quantity = quantity + 1 
+            WHERE user_id = :userId AND product_id = :productId
+        ");
+    } else {
+        $stmt = $db->prepare("
+            UPDATE cart_items 
+            SET quantity = quantity - 1 
+            WHERE user_id = :userId AND product_id = :productId
+        ");
     }
 
-    if ($action === "decrease") {
-        $id = $input["id"];
+    $stmt->bindParam(":userId", $userId, PDO::PARAM_INT);
+    $stmt->bindParam(":productId", $productId, PDO::PARAM_INT);
+    $stmt->execute();
 
-        foreach ($_SESSION["cart"] as $index => &$item) {
-            if ($item["id"] == $id) {
-                $item["quantity"]--;
+    $delete = $db->prepare("
+        DELETE FROM cart_items 
+        WHERE user_id = :userId AND product_id = :productId AND quantity <= 0
+    ");
+    $delete->bindParam(":userId", $userId, PDO::PARAM_INT);
+    $delete->bindParam(":productId", $productId, PDO::PARAM_INT);
+    $delete->execute();
+}
 
-                if ($item["quantity"] <= 0) {
-                    array_splice($_SESSION["cart"], $index, 1);
-                }
+function clearDbCart(PDO $db, int $userId): void {
+    $stmt = $db->prepare("DELETE FROM cart_items WHERE user_id = :userId");
+    $stmt->bindParam(":userId", $userId, PDO::PARAM_INT);
+    $stmt->execute();
+}
 
-                break;
-            }
-        }
+if ($action === "get") {
+    echo json_encode([
+        "success" => true,
+        "cart" => getCurrentCart($db, $isLoggedIn, $userId)
+    ]);
+    exit();
+}
 
-        echo json_encode([
-            "success" => true,
-            "cart" => $_SESSION["cart"]
-        ]);
-        exit;
+if ($action === "add") {
+    if ($isLoggedIn) {
+        addToDbCart($db, $userId, $input);
+    } else {
+        addToSessionCart($input);
     }
 
-    if ($action === "clear") {
+    echo json_encode([
+        "success" => true,
+        "cart" => getCurrentCart($db, $isLoggedIn, $userId)
+    ]);
+    exit();
+}
+
+if ($action === "increase") {
+    $id = (int) $input["id"];
+
+    if ($isLoggedIn) {
+        changeDbQuantity($db, $userId, $id, 1);
+    } else {
+        changeSessionQuantity($id, 1);
+    }
+
+    echo json_encode([
+        "success" => true,
+        "cart" => getCurrentCart($db, $isLoggedIn, $userId)
+    ]);
+    exit();
+}
+
+if ($action === "decrease") {
+    $id = (int) $input["id"];
+
+    if ($isLoggedIn) {
+        changeDbQuantity($db, $userId, $id, -1);
+    } else {
+        changeSessionQuantity($id, -1);
+    }
+
+    echo json_encode([
+        "success" => true,
+        "cart" => getCurrentCart($db, $isLoggedIn, $userId)
+    ]);
+    exit();
+}
+
+if ($action === "clear") {
+    if ($isLoggedIn) {
+        clearDbCart($db, $userId);
+    } else {
         $_SESSION["cart"] = [];
-
-        echo json_encode([
-            "success" => true,
-            "cart" => []
-        ]);
-        exit;
     }
+
+    echo json_encode([
+        "success" => true,
+        "cart" => []
+    ]);
+    exit();
+}
+
+echo json_encode([
+    "success" => false,
+    "message" => "Unbekannte Aktion"
+]);

@@ -1,23 +1,27 @@
-fetch("../backend/logic/checkLogin.php")
+const backendBaseUrl = window.location.pathname.includes("/frontend/sites/")
+    ? "../../backend/logic/"
+    : "../backend/logic/";
+
+fetch(backendBaseUrl + "checkLogin.php")
     .then(response => response.json())
     .then(data => {
 
-        if(data.loggedIn){
+        if (data.loggedIn) {
 
             const loginLink = document.getElementById("loginLink");
 
-            if(loginLink){
+            if (loginLink) {
 
                 loginLink.outerHTML = `
                     <a href="#" id="logoutLink">Logout</a>
                 `;
 
                 document.getElementById("logoutLink")
-                    .addEventListener("click", function(event){
+                    .addEventListener("click", function (event) {
 
                         event.preventDefault();
 
-                        fetch("../backend/logic/requestHandler.php", {
+                        fetch(backendBaseUrl + "requestHandler.php", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json"
@@ -29,7 +33,7 @@ fetch("../backend/logic/checkLogin.php")
                             .then(response => response.json())
                             .then(data => {
 
-                                if(data.success){
+                                if (data.success) {
                                     window.location.reload();
                                 }
 
