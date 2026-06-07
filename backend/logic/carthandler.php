@@ -193,6 +193,33 @@ if ($action === "clear") {
     exit();
 }
 
+if ($action === "remove") {
+    $id = (int) $input["id"];
+
+    if ($isLoggedIn) {
+        $stmt = $db->prepare("
+            DELETE FROM cart_items
+            WHERE user_id = :userId AND product_id = :productId
+        ");
+        $stmt->bindParam(":userId", $userId, PDO::PARAM_INT);
+        $stmt->bindParam(":productId", $id, PDO::PARAM_INT);
+        $stmt->execute();
+    } else {
+        foreach ($_SESSION["cart"] as $index => $item) {
+            if ($item["id"] == $id) {
+                array_splice($_SESSION["cart"], $index, 1);
+                break;
+            }
+        }
+    }
+
+    echo json_encode([
+        "success" => true,
+        "cart" => getCurrentCart($db, $isLoggedIn, $userId)
+    ]);
+    exit();
+}
+
 echo json_encode([
     "success" => false,
     "message" => "Unbekannte Aktion"

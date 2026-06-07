@@ -1,4 +1,3 @@
-
 console.log("cart.js wurde geladen")
 function sendCartAction(action, id = null) {
 

@@ -17,6 +17,33 @@
     <link rel="stylesheet" href="res/css/style.css">
 </head>
 
+<div id="cartOverlay" class="cart-overlay"></div>
+
+<aside id="cartDrawer" class="cart-drawer">
+    <div class="cart-drawer-header">
+        <button id="cartDrawerClose" type="button">
+            <i class="bi bi-chevron-left"></i>
+        </button>
+        <span>Weiter einkaufen</span>
+    </div>
+
+    <div class="cart-drawer-body">
+        <h2>Warenkorb</h2>
+
+        <div id="cartDrawerContent">
+            <p class="cart-drawer-info">Ihr Warenkorb wird geladen...</p>
+        </div>
+
+        <button class="cart-drawer-checkout" type="button" disabled>
+            Zur Kasse
+        </button>
+
+        <a class="cart-drawer-link" href="sites/warenkorb.html">
+            Warenkorb anzeigen
+        </a>
+    </div>
+</aside>
+
 <body>
     <header class="header"> <!-- Header mit Navigation -->
 
@@ -33,9 +60,34 @@
         <!-- Navigation (rechts) -->
         <nav class="navigation" id="navigation">
             <a href="sites/produkte.html">Produkte</a>
-            <a href="sites/login.html" id="loginLink" >Login</a>
-            <a href="sites/konto.html">Konto</a>
-            <a href="sites/warenkorb.html">Warenkorb</a>
+
+            <div class="account-menu">
+                <button id="accountBtn" class="account-btn">
+                    <i class="bi bi-person"></i>
+                </button>
+                <div id="accountDropdown" class="account-dropdown">
+                    <div id="guestMenu">
+                        <h3>Ihr Konto</h3>
+                        <a href="sites/login.html" class="login-btn-dropdown">
+                            Anmelden
+                        </a>
+                        <p>
+                            oder
+                            <a href="sites/login.html" style="text-decoration: underline">
+                                registrieren
+                            </a>
+                        </p>
+                    </div>
+                    <div id="userMenu" style="display: none">
+                        <h3 id="welcomeUser"></h3>
+                    </div>
+                </div>
+            </div>
+
+            <button id="cartDrawerBtn" class="cart-icon-btn" type="button">
+                <i class="bi bi-basket"></i>
+            </button>
+
             <a href="sites/merkliste.html" class="wishlist-link" aria-label="Merkliste">
                 <i class="bi bi-heart"></i>
                 <span class="wishlist-count" id="wishlistCount">0</span>
@@ -43,6 +95,17 @@
         </nav>
 
     </header>
+
+    <nav class="main-category-nav">
+        <a href="/404webshopnotfound/frontend/index.html">
+            <i class="bi bi-house"></i>
+        </a>
+        <a href="/404webshopnotfound/frontend/sites/produkte.html">Schokoladen</a>
+        <a href="/404webshopnotfound/frontend/sites/produkte.html">Pralinen & Trüffel</a>
+        <a href="/404webshopnotfound/frontend/sites/produkte.html">Schoko- & Nusscremes</a>
+        <a href="/404webshopnotfound/frontend/sites/produkte.html">Trinkschokoladen</a>
+        <a href="/404webshopnotfound/frontend/sites/produkte.html">Kakaobohnen & Nibs</a>
+    </nav>
 
     <main class="main">
     <h2 class="text-center my-4 items-title">Items</h2>
@@ -269,6 +332,7 @@
         });
     </script>
 
+<script src="js/cart-drawer.js"></script>
 <script src="js/shop.js"></script>
 <script src="js/wishlist.js"></script>
 <script src="js/navbar.js"></script>
