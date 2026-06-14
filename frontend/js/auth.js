@@ -9,6 +9,29 @@ $(document).ready(function () {
 
         console.log("Register Submit wurde abgefangen");
 
+        const password = $("#regPassword").val();
+        const passwordRepeat = $("#regPasswordRepeat").val();
+
+        if (password !== passwordRepeat) {
+            $("#registerMessage")
+                .removeClass("success")
+                .addClass("error")
+                .text("Die Passwörter stimmen nicht überein")
+                .fadeIn();
+
+            return;
+        }
+
+        if (password.length < 8) {
+            $("#registerMessage")
+                .removeClass("success")
+                .addClass("error")
+                .text("Das Passwort muss mindestens 8 Zeichen lang sein")
+                .fadeIn();
+
+            return;
+        }
+
         $.ajax({
             url: "../../backend/logic/requestHandler.php",
             method: "POST",
@@ -18,7 +41,8 @@ $(document).ready(function () {
                 action: "register",
                 username: $("#regUsername").val(),
                 email: $("#regEmail").val(),
-                password: $("#regPassword").val()
+                password: password,
+                passwordRepeat: passwordRepeat
             }),
             success: function (response) {
                 console.log("Backend Antwort:", response);
@@ -80,7 +104,7 @@ $(document).ready(function () {
                     .text(response.message)
                     .fadeIn();
 
-                if(response.success){
+                if (response.success) {
 
                     setTimeout(() => {
                         window.location.href = "../index.html";
@@ -103,5 +127,3 @@ $(document).ready(function () {
         });
     });
 });
-
-

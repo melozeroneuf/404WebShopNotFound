@@ -20,14 +20,13 @@ if (!$input) {
 $action = $input["action"] ?? "";
 
 // Register
-
-if($action === "register"){
+if ($action === "register") {
     $username = trim($input["username"] ?? "");
     $email = trim($input["email"] ?? "");
     $password = trim($input["password"] ?? "");
+    $passwordRepeat = trim($input["passwordRepeat"] ?? "");
 
-
-    if($username === "" || $email === "" || $password === ""){
+    if ($username === "" || $email === "" || $password === "" || $passwordRepeat === "") {
         echo json_encode([
             "success" => false,
             "message" => "Bitte alle Felder ausfüllen"
@@ -35,10 +34,26 @@ if($action === "register"){
         exit();
     }
 
-    if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         echo json_encode([
             "success" => false,
             "message" => "Ungültige E-Mail-Adresse"
+        ]);
+        exit();
+    }
+
+    if ($password !== $passwordRepeat) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Die Passwörter stimmen nicht überein"
+        ]);
+        exit();
+    }
+
+    if (strlen($password) < 8) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Das Passwort muss mindestens 8 Zeichen lang sein"
         ]);
         exit();
     }
@@ -48,11 +63,10 @@ if($action === "register"){
 
     $userModel = new User($db);
 
-    try{
+    try {
         $created = $userModel->register($username, $email, $password);
 
-        if($created){
-
+        if ($created) {
             $user = $userModel->findByEmailOrUsername($email);
 
             $_SESSION["user_id"] = $user["id"];
@@ -78,7 +92,7 @@ if($action === "register"){
         ]);
         exit();
 
-    }catch (PDOException $e){
+    } catch (PDOException $e) {
         echo json_encode([
             "success" => false,
             "message" => "Der Username oder E-Mail existiert bereits"
@@ -87,11 +101,7 @@ if($action === "register"){
     }
 }
 
-
-
-
 // Login
-
 if ($action === "login") {
     $login = trim($input["login"] ?? "");
     $password = trim($input["password"] ?? "");
@@ -140,10 +150,8 @@ if ($action === "login") {
     exit();
 }
 
-//Logout
-
+// Logout
 if ($action === "logout") {
-
     $_SESSION["cart"] = [];
 
     session_destroy();
@@ -156,8 +164,7 @@ if ($action === "logout") {
     exit();
 }
 
-//Wenn unbekannter Fehler kommt
-
+// Wenn unbekannter Fehler kommt
 echo json_encode([
     "success" => false,
     "message" => "Unbekannte Aktion"
