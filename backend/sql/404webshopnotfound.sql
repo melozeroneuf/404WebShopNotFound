@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 27. Apr 2026 um 14:43
+-- Erstellungszeit: 15. Jun 2026 um 22:31
 -- Server-Version: 10.4.32-MariaDB
 -- PHP-Version: 8.2.12
 
@@ -20,6 +20,117 @@ SET time_zone = "+00:00";
 --
 -- Datenbank: `404webshopnotfound`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `cart_items`
+--
+
+CREATE TABLE `cart_items` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `quantity` int(11) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `coupons`
+--
+
+CREATE TABLE `coupons` (
+  `id` int(11) NOT NULL,
+  `code` varchar(50) NOT NULL,
+  `value` decimal(10,2) NOT NULL,
+  `expires_at` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Daten für Tabelle `coupons`
+--
+
+INSERT INTO `coupons` (`id`, `code`, `value`, `expires_at`) VALUES
+(1, 'TEST10', 10.00, NULL),
+(2, 'TEST20', 20.00, '2026-06-16');
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `orders`
+--
+
+CREATE TABLE `orders` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `total` decimal(10,2) NOT NULL,
+  `status` varchar(50) DEFAULT 'offen',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Daten für Tabelle `orders`
+--
+
+INSERT INTO `orders` (`id`, `user_id`, `total`, `status`, `created_at`) VALUES
+(1, 1, 19.80, 'offen', '2026-06-15 19:51:49');
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `order_items`
+--
+
+CREATE TABLE `order_items` (
+  `id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `price` decimal(10,2) DEFAULT NULL,
+  `quantity` int(11) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Daten für Tabelle `order_items`
+--
+
+INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `name`, `price`, `quantity`) VALUES
+(1, 1, 1, 'JUAN LAURA Schokoladen | Kakaomasse', 9.90, 2),
+(2, 1, 2, 'PUMATIY | Dunkle Schokolade & Chili', 9.90, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `products`
+--
+
+CREATE TABLE `products` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `category` varchar(100) DEFAULT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `rating` decimal(2,1) DEFAULT 0.0,
+  `image` varchar(255) DEFAULT NULL,
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Daten für Tabelle `products`
+--
+
+INSERT INTO `products` (`id`, `name`, `description`, `category`, `price`, `rating`, `image`, `is_active`, `created_at`) VALUES
+(1, 'JUAN LAURA Schokoladen | Kakaomasse', 'Peru Pichari – Chuncho 100% | 70g', 'Schokolade', 9.90, 4.8, 'schoko1.png', 1, '2026-06-02 19:12:03'),
+(2, 'PUMATIY | Dunkle Schokolade & Chili', 'Peru Cusco – Aji 70% | 50g', 'Schokolade', 9.90, 4.6, 'schoko2.png', 1, '2026-06-02 19:12:03'),
+(3, 'PUMATIY Schokolade | Kakaomasse', 'Zeremonieller Kakao Peru Cusco – Chuncho 100% | 100g', 'Schokolade', 14.90, 4.9, 'schoko3.png', 1, '2026-06-02 19:12:03'),
+(4, 'KUYAY | Dunkle Schokolade & Blaubeeren', 'Peru Chocolat with Blueberry 70% | 70g', 'Schokolade', 9.90, 4.7, 'schoko4.png', 1, '2026-06-02 19:12:03'),
+(5, 'FJAK Chocolate | Dunkle Schokolade Belize', 'Trio Reserve Microlot 70% | BIO | 60g', 'Schokolade', 14.90, 4.8, 'schoko5.png', 1, '2026-06-02 19:12:03'),
+(6, 'CHOCOLATE & Love | Dunkle Schokolade & Minze', 'Mint Crunch 67% | BIO | 80g', 'Schokolade', 5.80, 4.5, 'schoko6.png', 1, '2026-06-02 19:12:03');
 
 -- --------------------------------------------------------
 
@@ -49,22 +160,13 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `salutation`, `firstname`, `lastname`, `address`, `zip`, `city`, `email`, `username`, `password`, `payment_info`, `role`, `is_active`, `created_at`) VALUES
-(1, NULL, NULL, NULL, NULL, NULL, NULL, 'test@test.at', 'testuser', '$2y$10$ozT6w7/iK1Vf1IB6BJxep.8xSVgu6wa8P6UMYAhhrOR/F0wRCZ4Oq', NULL, 'customer', 1, '2026-04-26 23:19:36');
+(1, NULL, NULL, NULL, NULL, NULL, NULL, 'test@test.at', 'testuser', '$2y$10$ozT6w7/iK1Vf1IB6BJxep.8xSVgu6wa8P6UMYAhhrOR/F0wRCZ4Oq', NULL, 'customer', 1, '2026-04-26 23:19:36'),
+(2, NULL, NULL, NULL, NULL, NULL, NULL, 'wi24b087@technikum-wien.at', 'wi24b087', '$2y$10$bylEkpdl/qz6TBECTaPJO.qyytpYac7lSQ.WMiH.jp1I2AcUWHPhC', NULL, 'admin', 1, '2026-05-17 18:04:50');
+
+-- --------------------------------------------------------
 
 --
--- Indizes der exportierten Tabellen
---
-
---
--- Indizes für die Tabelle `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`),
-  ADD UNIQUE KEY `username` (`username`);
-
---
--- Tabellenstruktur fur Tabelle `wishlist`
+-- Tabellenstruktur für Tabelle `wishlist`
 --
 
 CREATE TABLE `wishlist` (
@@ -75,90 +177,121 @@ CREATE TABLE `wishlist` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Tabellenstruktur fur Tabelle `product`
+-- Indizes der exportierten Tabellen
 --
 
-CREATE TABLE `products` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(255) NOT NULL,
-    `description` TEXT DEFAULT NULL,
-    `category` VARCHAR(100) DEFAULT NULL,
-    `price` DECIMAL(10,2) NOT NULL,
-    `rating` DECIMAL(2,1) DEFAULT 0.0,
-    `image` VARCHAR(255) DEFAULT NULL,
-    `is_active` TINYINT(1) DEFAULT 1,
-    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-CREATE TABLE `cart_items` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `user_id` INT(11) NOT NULL,
-  `product_id` INT(11) NOT NULL,
-  `name` VARCHAR(255) NOT NULL,
-  `price` DECIMAL(10,2) NOT NULL,
-  `quantity` INT(11) NOT NULL DEFAULT 1,
-  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq_user_product_cart` (`user_id`, `product_id`),
-  KEY `idx_cart_user_id` (`user_id`),
-  CONSTRAINT `fk_cart_user`
-      FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-          ON DELETE CASCADE
-);
-
+--
+-- Indizes für die Tabelle `cart_items`
+--
+ALTER TABLE `cart_items`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uniq_user_product_cart` (`user_id`,`product_id`),
+  ADD KEY `idx_cart_user_id` (`user_id`);
 
 --
--- Indizes fur Tabelle `wishlist`
+-- Indizes für die Tabelle `coupons`
 --
+ALTER TABLE `coupons`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `code` (`code`);
 
+--
+-- Indizes für die Tabelle `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `order_items`
+--
+ALTER TABLE `order_items`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indizes für die Tabelle `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `username` (`username`);
+
+--
+-- Indizes für die Tabelle `wishlist`
+--
 ALTER TABLE `wishlist`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `uniq_user_product` (`user_id`,`product_id`),
   ADD KEY `idx_user_id` (`user_id`);
-
-ALTER TABLE `wishlist`
-    ADD CONSTRAINT `fk_wishlist_user`
-    FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-    ON DELETE CASCADE;
 
 --
 -- AUTO_INCREMENT für exportierte Tabellen
 --
 
 --
--- AUTO_INCREMENT für Tabelle `users`
+-- AUTO_INCREMENT für Tabelle `cart_items`
 --
-ALTER TABLE `users`
+ALTER TABLE `cart_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+
+--
+-- AUTO_INCREMENT für Tabelle `coupons`
+--
+ALTER TABLE `coupons`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT für Tabelle `orders`
+--
+ALTER TABLE `orders`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT fur Tabelle `wishlist`
+-- AUTO_INCREMENT für Tabelle `order_items`
+--
+ALTER TABLE `order_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT für Tabelle `products`
+--
+ALTER TABLE `products`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT für Tabelle `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT für Tabelle `wishlist`
 --
 ALTER TABLE `wishlist`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- Constraints der exportierten Tabellen
+--
+
+--
+-- Constraints der Tabelle `cart_items`
+--
+ALTER TABLE `cart_items`
+  ADD CONSTRAINT `fk_cart_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints der Tabelle `wishlist`
+--
+ALTER TABLE `wishlist`
+  ADD CONSTRAINT `fk_wishlist_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
-INSERT INTO `products` (`name`, `description`, `category`, `price`, `rating`, `image`) VALUES
-   ('JUAN LAURA Schokoladen | Kakaomasse', 'Peru Pichari – Chuncho 100% | 70g', 'Schokolade', 9.90, 4.8, 'schoko1.png'),
-   ('PUMATIY | Dunkle Schokolade & Chili', 'Peru Cusco – Aji 70% | 50g', 'Schokolade', 9.90, 4.6, 'schoko2.png'),
-   ('PUMATIY Schokolade | Kakaomasse', 'Zeremonieller Kakao Peru Cusco – Chuncho 100% | 100g', 'Schokolade', 14.90, 4.9, 'schoko3.png'),
-   ('KUYAY | Dunkle Schokolade & Blaubeeren', 'Peru Chocolat with Blueberry 70% | 70g', 'Schokolade', 9.90, 4.7, 'schoko4.png'),
-   ('FJAK Chocolate | Dunkle Schokolade Belize', 'Trio Reserve Microlot 70% | BIO | 60g', 'Schokolade', 14.90, 4.8, 'schoko5.png'),
-   ('CHOCOLATE & Love | Dunkle Schokolade & Minze', 'Mint Crunch 67% | BIO | 80g', 'Schokolade', 5.80, 4.5, 'schoko6.png');
-
-
--- Gutschein Tabelle und Testgutschein hinzufügen
-
-CREATE TABLE `coupons` (
-  `id` INT AUTO_INCREMENT PRIMARY KEY,
-  `code` VARCHAR(50) NOT NULL UNIQUE,
-  `value` DECIMAL(10,2) NOT NULL
-);
-
-INSERT INTO `coupons` (`code`, `value`)
-VALUES ('TEST10', 10.00);
