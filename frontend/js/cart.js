@@ -6,7 +6,7 @@ function sendCartAction(action, id = null) {
 
     console.log("Cart Action:", action, id);
 
-    fetch("http://localhost:3000/logic/carthandler.php", {
+    fetch("../../backend/logic/cartHandler.php", {
         method: "POST",
         credentials: "same-origin",
         headers: {
