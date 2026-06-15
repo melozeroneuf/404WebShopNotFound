@@ -152,3 +152,15 @@ INSERT INTO `products` (`name`, `description`, `category`, `price`, `rating`, `i
    ('KUYAY | Dunkle Schokolade & Blaubeeren', 'Peru Chocolat with Blueberry 70% | 70g', 'Schokolade', 9.90, 4.7, 'schoko4.png'),
    ('FJAK Chocolate | Dunkle Schokolade Belize', 'Trio Reserve Microlot 70% | BIO | 60g', 'Schokolade', 14.90, 4.8, 'schoko5.png'),
    ('CHOCOLATE & Love | Dunkle Schokolade & Minze', 'Mint Crunch 67% | BIO | 80g', 'Schokolade', 5.80, 4.5, 'schoko6.png');
+
+
+-- Gutschein Tabelle und Testgutschein hinzufügen
+
+CREATE TABLE `coupons` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `code` VARCHAR(50) NOT NULL UNIQUE,
+  `value` DECIMAL(10,2) NOT NULL
+);
+
+INSERT INTO `coupons` (`code`, `value`)
+VALUES ('TEST10', 10.00);
