@@ -9,9 +9,51 @@ $(document).ready(function () {
 
         console.log("Register Submit wurde abgefangen");
 
+        const username = $("#regUsername").val().trim();
+        const firstname = $("#firstname").val().trim();
+        const lastname = $("#lastname").val().trim();
+        const address = $("#address").val().trim();
+        const zip = $("#zip").val().trim();
+        const city = $("#city").val().trim();
+
         const password = $("#regPassword").val();
         const passwordRepeat = $("#regPasswordRepeat").val();
 
+        if (
+            firstname === "" ||
+            lastname === "" ||
+            address === "" ||
+            zip === "" ||
+            city === ""
+        ) {
+            $("#registerMessage")
+                .removeClass("success")
+                .addClass("error")
+                .text("Bitte alle Pflichtfelder ausfüllen")
+                .fadeIn();
+
+            return;
+        }
+
+        if (username.length < 3) {
+            $("#registerMessage")
+                .removeClass("success")
+                .addClass("error")
+                .text("Der Benutzername muss mindestens 3 Zeichen lang sein")
+                .fadeIn();
+
+            return;
+        }
+
+        if (!/^\d{4}$/.test(zip)) {
+            $("#registerMessage")
+                .removeClass("success")
+                .addClass("error")
+                .text("Bitte eine gültige PLZ eingeben")
+                .fadeIn();
+
+            return;
+        }
         if (password !== passwordRepeat) {
             $("#registerMessage")
                 .removeClass("success")
