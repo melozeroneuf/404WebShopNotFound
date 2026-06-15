@@ -198,6 +198,47 @@ if ($action === "login") {
     exit();
 }
 
+// Kontodaten laden
+if ($action === "getAccountData") {
+
+    if (!isset($_SESSION["user_id"])) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Nicht eingeloggt"
+        ]);
+        exit();
+    }
+
+    $dbAccess = new DBAccess();
+    $db = $dbAccess->connect();
+
+    $stmt = $db->prepare("
+        SELECT
+            username,
+            email,
+            firstname,
+            lastname,
+            address,
+            zip,
+            city,
+            payment_info
+        FROM users
+        WHERE id = :id
+        LIMIT 1
+    ");
+
+    $stmt->bindParam(":id", $_SESSION["user_id"]);
+    $stmt->execute();
+
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    echo json_encode([
+        "success" => true,
+        "user" => $user
+    ]);
+    exit();
+}
+
 // Logout
 if ($action === "logout") {
     $_SESSION["cart"] = [];
