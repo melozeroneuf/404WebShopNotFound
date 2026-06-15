@@ -16,34 +16,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="res/css/style.css">
 </head>
-
-<div id="cartOverlay" class="cart-overlay"></div>
-
-<aside id="cartDrawer" class="cart-drawer">
-    <div class="cart-drawer-header">
-        <button id="cartDrawerClose" type="button">
-            <i class="bi bi-chevron-left"></i>
-        </button>
-        <span>Weiter einkaufen</span>
-    </div>
-
-    <div class="cart-drawer-body">
-        <h2>Warenkorb</h2>
-
-        <div id="cartDrawerContent">
-            <p class="cart-drawer-info">Ihr Warenkorb wird geladen...</p>
-        </div>
-
-        <button class="cart-drawer-checkout" type="button" disabled>
-            Zur Kasse
-        </button>
-
-        <a class="cart-drawer-link" href="sites/warenkorb.html">
-            Warenkorb anzeigen
-        </a>
-    </div>
-</aside>
-
 <body>
     <header class="header"> <!-- Header mit Navigation -->
 
@@ -91,6 +63,10 @@
             <a href="sites/merkliste.html" class="wishlist-link" aria-label="Merkliste">
                 <i class="bi bi-heart"></i>
                 <span class="wishlist-count" id="wishlistCount">0</span>
+            </a>
+
+            <a href="sites/admin.html" id="adminLink" class="admin-link" style="display:none;">
+                <i class="bi bi-shield-lock"></i>
             </a>
         </nav>
 
@@ -304,6 +280,33 @@
 
         </div>
     </footer>
+
+    <div id="cartOverlay" class="cart-overlay"></div>
+
+    <aside id="cartDrawer" class="cart-drawer">
+        <div class="cart-drawer-header">
+            <button id="cartDrawerClose" type="button">
+                <i class="bi bi-chevron-left"></i>
+            </button>
+            <span>Weiter einkaufen</span>
+        </div>
+
+        <div class="cart-drawer-body">
+            <h2>Warenkorb</h2>
+
+            <div id="cartDrawerContent">
+                <p class="cart-drawer-info">Ihr Warenkorb wird geladen...</p>
+            </div>
+
+            <button class="cart-drawer-checkout" type="button" disabled>
+                Zur Kasse
+            </button>
+
+            <a class="cart-drawer-link" href="sites/warenkorb.html">
+                Warenkorb anzeigen
+            </a>
+        </div>
+    </aside>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

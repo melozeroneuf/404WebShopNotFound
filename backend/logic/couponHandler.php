@@ -22,8 +22,19 @@ if (!$coupon) {
     exit;
 }
 
+if (
+    !empty($coupon["expires_at"]) &&
+    strtotime($coupon["expires_at"]) < strtotime(date("Y-m-d"))
+) {
+    echo json_encode([
+        "success" => false,
+        "message" => "Dieser Gutschein ist abgelaufen"
+    ]);
+    exit;
+}
+
 echo json_encode([
     "success" => true,
-    "message" => $coupon["value"] . "€ Gutschein eingelöst!",
+    "message" => $coupon["value"] . "% Gutschein eingelöst!",
     "value" => $coupon["value"]
 ]);

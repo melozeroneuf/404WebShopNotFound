@@ -12,6 +12,12 @@ fetch(backendBaseUrl + "checkLogin.php")
 
         if (data.loggedIn) {
 
+            const adminLink = document.getElementById("adminLink");
+
+            if (adminLink && data.role === "admin") {
+                adminLink.style.display = "flex";
+            }
+
             if (guestMenu) {
                 guestMenu.style.display = "none";
             }
