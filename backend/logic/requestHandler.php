@@ -65,6 +65,36 @@ if ($action === "register") {
         exit();
     }
 
+    if (
+        $firstname === "" ||
+        $lastname === "" ||
+        $address === "" ||
+        $zip === "" ||
+        $city === ""
+    ) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Bitte alle Pflichtfelder ausfüllen"
+        ]);
+        exit();
+    }
+
+    if (strlen($username) < 3) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Der Benutzername muss mindestens 3 Zeichen lang sein"
+        ]);
+        exit();
+    }
+
+    if (!preg_match("/^\d{4}$/", $zip)) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Bitte eine gültige PLZ eingeben"
+        ]);
+        exit();
+    }
+
     $dbAccess = new DBAccess();
     $db = $dbAccess->connect();
 
