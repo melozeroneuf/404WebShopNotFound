@@ -1,4 +1,7 @@
 console.log("cart.js wurde geladen")
+
+let couponDiscount = 0;
+
 function sendCartAction(action, id = null) {
 
     console.log("Cart Action:", action, id);
@@ -91,6 +94,8 @@ function renderCart(cart) {
             <hr>
         `;
     });
+
+    total = Math.max(0, total - couponDiscount);
 
     html += `
         <button type="button"
