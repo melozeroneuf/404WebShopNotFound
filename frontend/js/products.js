@@ -1,4 +1,4 @@
-const productHandlerUrl = "../../backend/logic/productHandler.php";
+const productHandlerUrl = "/404webshopnotfound/backend/logic/productHandler.php";
 
 let allProducts = [];
 

@@ -1,8 +1,6 @@
 console.log("shop.js wurde geladen");
 
-const cartHandlerUrl = window.location.pathname.includes("/frontend/sites/")
-    ? "../../backend/logic/cartHandler.php"
-    : "../../backend/logic/cartHandler.php";
+const cartHandlerUrl = "/404webshopnotfound/backend/logic/cartHandler.php"
 
 document.addEventListener("click", function (event) {
     const button = event.target.closest(".add-to-cart-btn");

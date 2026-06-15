@@ -2,13 +2,9 @@ console.log("wishlist.js wurde geladen");
 
 const wishlistStorageKey = "wishlistItems";
 
-const wishlistHandlerUrl = window.location.pathname.includes("/frontend/sites/")
-    ? "../../backend/logic/wishlistHandler.php"
-    : "backend/logic/wishlistHandler.php";
+const wishlistHandlerUrl = "/404webshopnotfound/backend/logic/wishlistHandler.php";
 
-const checkLoginUrl = window.location.pathname.includes("/frontend/sites/")
-    ? "../../backend/logic/checkLogin.php"
-    : "backend/logic/checkLogin.php";
+const checkLoginUrl = "/404webshopnotfound/backend/logic/checkLogin.php";
 
 let isUserLoggedIn = false;
 

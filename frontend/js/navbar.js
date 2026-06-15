@@ -1,7 +1,6 @@
 
-const backendBaseUrl = window.location.pathname.includes("/frontend/sites/")
-    ? "../../backend/logic/"
-    : "../../backend/logic/";
+const backendBaseUrl = "/404webshopnotfound/backend/logic/";
+
 
 const guestMenu = document.getElementById("guestMenu");
 const userMenu = document.getElementById("userMenu");

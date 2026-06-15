@@ -2,11 +2,13 @@ console.log("cart.js wurde geladen")
 
 let couponDiscount = 0;
 
+const backendBaseUrl = "/404webshopnotfound/backend/logic/";
+
 function sendCartAction(action, id = null) {
 
     console.log("Cart Action:", action, id);
 
-    fetch("../../backend/logic/cartHandler.php", {
+    fetch(backendBaseUrl + "cartHandler.php", {
         method: "POST",
         credentials: "same-origin",
         headers: {
@@ -118,18 +120,27 @@ document.addEventListener("DOMContentLoaded", function () {
     showCart();
 });
 
-document.getElementById("applyCouponBtn").addEventListener("click", () => {
-    const code = document.getElementById("couponCode").value;
+const applyCouponBtn = document.getElementById("applyCouponBtn");
 
-    fetch("../../backend/logic/couponHandler.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ code: code })
-    })
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById("couponMessage").innerText = data.message;
+if (applyCouponBtn) {
+    applyCouponBtn.addEventListener("click", () => {
+        const code = document.getElementById("couponCode").value;
+
+        fetch(backendBaseUrl + "couponHandler.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ code: code })
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("couponMessage").innerText = data.message;
+
+                if (data.success) {
+                    couponDiscount = parseFloat(data.value);
+                    showCart();
+                }
+            });
     });
-});
+}

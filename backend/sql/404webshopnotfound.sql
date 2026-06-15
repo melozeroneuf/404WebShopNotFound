@@ -108,8 +108,6 @@ CREATE TABLE `cart_items` (
 );
 
 
-
-
 --
 -- Indizes fur Tabelle `wishlist`
 --
