@@ -13,6 +13,16 @@ fetch(productHandlerUrl)
         }
 
         allProducts = data.products;
+
+        const params = new URLSearchParams(window.location.search);
+        const selectedCategory = params.get("kategorie");
+
+        if (selectedCategory) {
+            allProducts = allProducts.filter(
+                product => product.category === selectedCategory
+            );
+        }
+
         renderProducts(allProducts);
         setupSearch();
 

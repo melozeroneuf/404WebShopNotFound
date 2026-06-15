@@ -123,6 +123,15 @@
     color: #8b4a24;
 }
 
+.navigation a {
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.logo {
+    max-height: 90px;
+}
+
 /* ===== FOOTER ===== */
 
 .footer {
@@ -1435,7 +1444,7 @@
 .admin-link {
     text-decoration: none;
     color: #111;
-    font-size: 24px;
+    font-size: 22.5px !important;
     display: flex;
     align-items: center;
     justify-content: center;
