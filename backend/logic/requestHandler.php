@@ -259,14 +259,8 @@ if ($action === "updateAccountData") {
     $city = trim($input["city"] ?? "");
     $paymentInfo = trim($input["payment_info"] ?? "");
     $currentPassword = trim($input["currentPassword"] ?? "");
-
-    if ($currentPassword === "") {
-        echo json_encode([
-            "success" => false,
-            "message" => "Bitte aktuelles Passwort eingeben"
-        ]);
-        exit();
-    }
+    $newPassword = trim($input["newPassword"] ?? "");
+    $newPasswordRepeat = trim($input["newPasswordRepeat"] ?? "");
 
     if (
         $username === "" ||
@@ -323,12 +317,68 @@ if ($action === "updateAccountData") {
 
     $user = $passwordStmt->fetch(PDO::FETCH_ASSOC);
 
+    if ($currentPassword === "") {
+        echo json_encode([
+            "success" => false,
+            "message" => "Bitte aktuelles Passwort eingeben"
+        ]);
+        exit();
+    }
+
     if (!$user || !password_verify($currentPassword, $user["password"])) {
         echo json_encode([
             "success" => false,
             "message" => "Das eingegebene Passwort ist falsch"
         ]);
         exit();
+    }
+
+    if ($newPassword !== "" || $newPasswordRepeat !== "") {
+
+        if ($currentPassword === "") {
+            echo json_encode([
+                "success" => false,
+                "message" => "Bitte aktuelles Passwort eingeben"
+            ]);
+            exit();
+        }
+
+        if (!password_verify($currentPassword, $user["password"])) {
+            echo json_encode([
+                "success" => false,
+                "message" => "Das aktuelle Passwort ist falsch"
+            ]);
+            exit();
+        }
+
+        if ($newPassword !== $newPasswordRepeat) {
+            echo json_encode([
+                "success" => false,
+                "message" => "Die neuen Passwörter stimmen nicht überein"
+            ]);
+            exit();
+        }
+
+        if (strlen($newPassword) < 8) {
+            echo json_encode([
+                "success" => false,
+                "message" => "Das neue Passwort muss mindestens 8 Zeichen lang sein"
+            ]);
+            exit();
+        }
+
+        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+        $passwordUpdate = $db->prepare("
+        UPDATE users
+        SET password = :password
+        WHERE id = :id
+    ");
+
+        $passwordUpdate->bindParam(":password", $hashedPassword);
+        $passwordUpdate->bindParam(":id", $_SESSION["user_id"], PDO::PARAM_INT);
+
+        $passwordUpdate->execute();
     }
 
     try {

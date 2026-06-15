@@ -72,8 +72,51 @@
                     <input type="text" id="paymentInfo" name="paymentInfo">
                 </div>
 
+                <div class="password-toggle-box">
+                    <button type="button" id="togglePasswordChange" class="password-toggle-btn">
+                        Passwort ändern
+                    </button>
+
+                    <div id="passwordChangeBox" class="password-change-box hidden">
+
+                        <div class="form-row">
+
+                            <div class="form-group">
+                                <label for="newPassword">Neues Passwort</label>
+                                <input type="password" id="newPassword" name="newPassword">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="newPasswordRepeat">
+                                    Neues Passwort wiederholen
+                                </label>
+                                <input type="password"
+                                       id="newPasswordRepeat"
+                                       name="newPasswordRepeat">
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="currentPassword">
+                        Aktuelles Passwort (für Änderungen erforderlich)
+                    </label>
+
+                    <input type="password"
+                           id="currentPassword"
+                           name="currentPassword"
+                           placeholder="Aktuelles Passwort eingeben">
+                </div>
+
+                <p id="accountMessage" class="account-message"></p>
+
                 <div class="account-actions">
-                    <button type="submit" class="save-btn">Änderungen speichern</button>
+                    <button type="submit" class="save-btn">
+                        Änderungen speichern
+                    </button>
                 </div>
 
             </form>

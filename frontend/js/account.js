@@ -2,6 +2,10 @@ $(document).ready(function () {
 
     loadAccountData();
 
+    $("#togglePasswordChange").on("click", function () {
+        $("#passwordChangeBox").toggleClass("hidden");
+    });
+
     function loadAccountData() {
         $.ajax({
             url: "../../backend/logic/requestHandler.php",
@@ -39,13 +43,6 @@ $(document).ready(function () {
     $("#accountForm").on("submit", function (event) {
         event.preventDefault();
 
-        const currentPassword = prompt("Bitte gib dein aktuelles Passwort ein:");
-
-        if (currentPassword === null || currentPassword.trim() === "") {
-            alert("Änderungen wurden nicht gespeichert.");
-            return;
-        }
-
         $.ajax({
             url: "../../backend/logic/requestHandler.php",
             method: "POST",
@@ -62,14 +59,30 @@ $(document).ready(function () {
                 zip: $("#zip").val(),
                 city: $("#city").val(),
                 payment_info: $("#paymentInfo").val(),
-                currentPassword: currentPassword
+                currentPassword: $("#currentPassword").val(),
+                newPassword: $("#newPassword").val(),
+                newPasswordRepeat: $("#newPasswordRepeat").val()
             }),
 
             success: function (response) {
-                alert(response.message);
-
                 if (response.success) {
-                    loadAccountData();
+                    $("#accountMessage")
+                        .removeClass("error")
+                        .addClass("success")
+                        .text("Änderungen erfolgreich gespeichert.");
+
+                    $("#currentPassword").val("");
+                    $("#newPassword").val("");
+                    $("#newPasswordRepeat").val("");
+
+                    setTimeout(function () {
+                        window.location.href = "../index.html";
+                    }, 2000);
+                } else {
+                    $("#accountMessage")
+                        .removeClass("success")
+                        .addClass("error")
+                        .text(response.message);
                 }
             },
 

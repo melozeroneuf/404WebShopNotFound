@@ -1290,16 +1290,17 @@
 /* ===== Konto ===== */
 
 .account-page {
-    min-height: 80vh;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding: 60px 20px;
+    align-items: flex-start;
+    padding: 35px 20px;
+    background: #fff;
 }
 
 .account-card {
     width: 100%;
-    max-width: 1150px;
+    max-width: 1080px;
     display: flex;
     background: #fff;
     border-radius: 24px;
@@ -1308,111 +1309,121 @@
 }
 
 .account-image {
-    flex: 0.8;
+    flex: 0.65;
     background: #f4f4f4;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 40px;
-}
-
-.account-image:hover{
-    opacity: 0.7;
+    padding: 30px;
 }
 
 .account-image img {
-    max-width: 100%;
+    max-width: 72%;
     height: auto;
 }
 
 .account-content {
-    flex: 1.4;
-    padding: 55px 50px;
+    flex: 1.35;
+    padding: 32px 38px;
 }
 
 .account-content h2 {
-    font-size: 34px;
-    margin-bottom: 10px;
+    font-size: 30px;
+    margin-bottom: 6px;
 }
 
 .account-subtitle {
     color: #777;
-    margin-bottom: 35px;
+    margin-bottom: 18px;
 }
 
-.profile-section {
-    display: flex;
-    gap: 45px;
-}
-
-.profile-image-box {
-    width: 230px;
-    text-align: center;
-}
-
-.profile-image {
-    width: 170px;
-    height: 170px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 3px solid #eee;
-    margin-bottom: 20px;
-}
-
-.profile-upload-btn {
-    display: inline-block;
-    width: 100%;
-    padding: 13px;
-    background: #111;
-    color: white;
-    border-radius: 12px;
-    cursor: pointer;
-    font-weight: 600;
-}
-
-.profile-upload-btn:hover {
-    background: #333;
-}
-
-#profileUpload {
-    display: none;
+.account-content .page-header-row {
+    margin-bottom: 18px;
 }
 
 .account-form {
-    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
+.account-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.account-form label {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 800;
+    color: #333;
 }
 
 .form-row {
     display: flex;
-    gap: 20px;
+    gap: 12px;
 }
 
 .form-row .form-group {
     flex: 1;
 }
 
-.account-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 15px;
-    margin-top: 25px;
+.account-form input {
+    width: 100%;
+    height: 40px;
+    padding: 8px 12px;
+    border: 1px solid #d5d5d5;
+    border-radius: 10px;
+    background: #fafafa;
+    font-size: 14px;
+    outline: none;
 }
 
-.cancel-btn,
-.save-btn {
-    padding: 14px 22px;
-    border-radius: 12px;
-    font-size: 16px;
+.account-form input:focus {
+    border-color: #111;
+    background: #fff;
+}
+
+.password-toggle-box {
+    margin-top: 4px;
+}
+
+.password-toggle-btn {
+    border: none;
+    background: #f0f0f0;
+    color: #111;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 800;
     cursor: pointer;
 }
 
-.cancel-btn {
-    background: white;
-    border: 1px solid #aaa;
-    color: #111;
+.password-toggle-btn:hover {
+    background: #e3e3e3;
+}
+
+.password-change-box {
+    margin-top: 12px;
+    padding: 14px;
+    border-radius: 14px;
+    background: #f7f7f7;
+    border: 1px solid #e2e2e2;
+}
+
+.account-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 4px;
 }
 
 .save-btn {
+    min-width: 210px;
+    padding: 13px 20px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
     background: #111;
     border: none;
     color: white;
@@ -1422,24 +1433,65 @@
     background: #333;
 }
 
+.account-message {
+    display: none;
+    margin: 0 0 12px;
+    padding: 12px 15px;
+    border-radius: 12px;
+    font-family: Arial, sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+}
+
+.account-message.success {
+    display: block;
+    background: #eaf8ef;
+    color: #168a3a;
+    border: 1px solid #bfe8cb;
+}
+
+.account-message.error {
+    display: block;
+    background: #fff0f0;
+    color: #c92027;
+    border: 1px solid #f0b8b8;
+}
+
+.hidden {
+    display: none !important;
+}
+
 @media (max-width: 900px) {
     .account-card {
         flex-direction: column;
     }
 
-    .profile-section {
-        flex-direction: column;
+    .account-image {
+        padding: 25px;
     }
 
-    .profile-image-box {
-        width: 100%;
+    .account-image img {
+        max-width: 220px;
+    }
+
+    .account-content {
+        padding: 30px 24px;
     }
 
     .form-row {
         flex-direction: column;
-        gap: 0;
+        gap: 11px;
+    }
+
+    .account-actions {
+        justify-content: stretch;
+    }
+
+    .save-btn {
+        width: 100%;
     }
 }
+
 /* ===== Admin-Seite ===== */
 .admin-link {
     text-decoration: none;
