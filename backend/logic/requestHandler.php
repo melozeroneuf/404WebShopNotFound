@@ -25,6 +25,13 @@ if ($action === "register") {
     $email = trim($input["email"] ?? "");
     $password = trim($input["password"] ?? "");
     $passwordRepeat = trim($input["passwordRepeat"] ?? "");
+    $salutation = trim($input["salutation"] ?? "");
+    $firstname = trim($input["firstname"] ?? "");
+    $lastname = trim($input["lastname"] ?? "");
+    $address = trim($input["address"] ?? "");
+    $zip = trim($input["zip"] ?? "");
+    $city = trim($input["city"] ?? "");
+    $paymentInfo = trim($input["payment_info"] ?? "");
 
     if ($username === "" || $email === "" || $password === "" || $passwordRepeat === "") {
         echo json_encode([
@@ -64,7 +71,18 @@ if ($action === "register") {
     $userModel = new User($db);
 
     try {
-        $created = $userModel->register($username, $email, $password);
+        $created = $userModel->register(
+            $username,
+            $email,
+            $password,
+            $salutation,
+            $firstname,
+            $lastname,
+            $address,
+            $zip,
+            $city,
+            $paymentInfo
+        );
 
         if ($created) {
             $user = $userModel->findByEmailOrUsername($email);

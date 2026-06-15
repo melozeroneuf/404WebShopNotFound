@@ -6,20 +6,40 @@ class User {
     public function __construct(PDO $dbConnection) {
         $this->conn = $dbConnection;
     }
-
-    public function register(string $username, string $email, string $password): bool {
+    public function register(
+        string $username,
+        string $email,
+        string $password,
+        ?string $salutation = null,
+        ?string $firstname = null,
+        ?string $lastname = null,
+        ?string $address = null,
+        ?string $zip = null,
+        ?string $city = null,
+        ?string $paymentInfo = null
+    ): bool {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        $sql = "INSERT INTO users (username, email, password, role) VALUES (:username, :email, :password, 'customer')";
+        $sql = "INSERT INTO users 
+        (salutation, firstname, lastname, address, zip, city, email, username, password, payment_info, role)
+        VALUES
+        (:salutation, :firstname, :lastname, :address, :zip, :city, :email, :username, :password, :payment_info, 'customer')";
 
         $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(":username", $username);
+
+        $stmt->bindParam(":salutation", $salutation);
+        $stmt->bindParam(":firstname", $firstname);
+        $stmt->bindParam(":lastname", $lastname);
+        $stmt->bindParam(":address", $address);
+        $stmt->bindParam(":zip", $zip);
+        $stmt->bindParam(":city", $city);
         $stmt->bindParam(":email", $email);
+        $stmt->bindParam(":username", $username);
         $stmt->bindParam(":password", $hashedPassword);
+        $stmt->bindParam(":payment_info", $paymentInfo);
 
         return $stmt->execute();
     }
-
     public function findByEmailOrUsername(string $login): ?array {
         $sql = "SELECT * FROM users 
                 WHERE email = :login OR username = :login 

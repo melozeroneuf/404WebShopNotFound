@@ -39,10 +39,20 @@ $(document).ready(function () {
             dataType: "json",
             data: JSON.stringify({
                 action: "register",
+
+                salutation: $("#salutation").val(),
+                firstname: $("#firstname").val(),
+                lastname: $("#lastname").val(),
+                address: $("#address").val(),
+                zip: $("#zip").val(),
+                city: $("#city").val(),
+
                 username: $("#regUsername").val(),
                 email: $("#regEmail").val(),
                 password: password,
-                passwordRepeat: passwordRepeat
+                passwordRepeat: passwordRepeat,
+
+                payment_info: $("#paymentInfo").val()
             }),
             success: function (response) {
                 console.log("Backend Antwort:", response);
