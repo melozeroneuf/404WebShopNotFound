@@ -8,7 +8,7 @@ function sendCartAction(action, id = null) {
 
     console.log("Cart Action:", action, id);
 
-    fetch(backendBaseUrl + "cartHandler.php", {
+    fetch(backendBaseUrl + "carthandler.php", {
         method: "POST",
         credentials: "same-origin",
         headers: {
@@ -142,5 +142,22 @@ if (applyCouponBtn) {
                     showCart();
                 }
             });
+    });
+}
+
+function goCheckout() {
+
+    fetch(backendBaseUrl + "checkLogin.php", {
+        method: "GET",
+        credentials: "same-origin"
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        if (data.loggedIn) {
+            window.location.href = "/404webshopnotfound/frontend/sites/checkout.html";
+        } else {
+            window.location.href = "/404webshopnotfound/frontend/sites/login.html";
+        }
     });
 }
