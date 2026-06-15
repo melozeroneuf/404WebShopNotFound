@@ -5,8 +5,8 @@ const cartDrawerClose = document.getElementById("cartDrawerClose");
 const cartDrawerContent = document.getElementById("cartDrawerContent");
 
 const cartDrawerUrl = window.location.pathname.includes("/frontend/sites/")
-    ? "http://localhost:3000/logic/carthandler.php"
-    : "http://localhost:3000/logic/carthandler.php";
+    ? "../../backend/logic/cartHandler.php"
+    : "../backend/logic/cartHandler.php";
 
 function openCartDrawer() {
     cartDrawer.classList.add("active");
