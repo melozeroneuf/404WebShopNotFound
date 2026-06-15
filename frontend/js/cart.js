@@ -97,7 +97,8 @@ function renderCart(cart) {
         `;
     });
 
-    total = Math.max(0, total - couponDiscount);
+    total = total - (total * couponDiscount / 100);
+    total = Math.max(0, total);
 
     html += `
         <button type="button"
