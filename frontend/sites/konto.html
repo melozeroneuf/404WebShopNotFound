@@ -23,72 +23,69 @@
                 <h2>Mein Konto</h2>
                 <a class="cart-back" href="../index.html">Zurück zum Shop</a>
             </div>
+
             <p class="account-subtitle">Verwalte deine persönlichen Daten.</p>
 
-            <div class="profile-section">
+            <form id="accountForm" class="account-form">
 
-                <div class="profile-image-box">
-                    <img src="../img/default-avatar.png" alt="Profilbild" class="profile-image">
-
-                    <label for="profileUpload" class="profile-upload-btn">
-                        Profilbild auswählen
-                    </label>
-
-                    <input type="file" id="profileUpload" name="profileUpload" accept="image/*">
+                <div class="form-group">
+                    <label for="username">Benutzername</label>
+                    <input type="text" id="username" name="username">
                 </div>
 
-                <form id="accountForm" class="account-form">
+                <div class="form-group">
+                    <label for="email">E-Mail-Adresse</label>
+                    <input type="email" id="email" name="email">
+                </div>
 
+                <div class="form-row">
                     <div class="form-group">
-                        <label for="username">Benutzername</label>
-                        <input type="text" id="username" name="username" value="MaxMuster">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">E-Mail-Adresse</label>
-                        <input type="email" id="email" name="email" value="max@example.com">
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="firstname">Vorname</label>
-                            <input type="text" id="firstname" name="firstname" value="Max">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="lastname">Nachname</label>
-                            <input type="text" id="lastname" name="lastname" value="Mustermann">
-                        </div>
+                        <label for="firstname">Vorname</label>
+                        <input type="text" id="firstname" name="firstname">
                     </div>
 
                     <div class="form-group">
-                        <label for="birthdate">Geburtsdatum</label>
-                        <input type="date" id="birthdate" name="birthdate">
+                        <label for="lastname">Nachname</label>
+                        <input type="text" id="lastname" name="lastname">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Straße</label>
+                    <input type="text" id="address" name="address">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="zip">PLZ</label>
+                        <input type="text" id="zip" name="zip">
                     </div>
 
                     <div class="form-group">
-                        <label for="phone">Telefonnummer</label>
-                        <input type="tel" id="phone" name="phone" value="+43 123 456789">
+                        <label for="city">Ort</label>
+                        <input type="text" id="city" name="city">
                     </div>
+                </div>
 
-                    <div class="form-group">
-                        <label for="address">Adresse</label>
-                        <input type="text" id="address" name="address" value="Musterstraße 1, 1010 Wien">
-                    </div>
+                <div class="form-group">
+                    <label for="paymentInfo">Zahlungsinformation</label>
+                    <input type="text" id="paymentInfo" name="paymentInfo">
+                </div>
 
-                    <div class="account-actions">
-                        <button type="button" class="cancel-btn">Abbrechen</button>
-                        <button type="submit" class="save-btn">Änderungen speichern</button>
-                    </div>
+                <div class="account-actions">
+                    <button type="submit" class="save-btn">Änderungen speichern</button>
+                </div>
 
-                </form>
-
-            </div>
+            </form>
 
         </div>
+
     </section>
 
 </main>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="../js/account.js"></script>
 
 </body>
 </html>

@@ -239,6 +239,142 @@ if ($action === "getAccountData") {
     exit();
 }
 
+// Kontodaten speichern
+if ($action === "updateAccountData") {
+
+    if (!isset($_SESSION["user_id"])) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Nicht eingeloggt"
+        ]);
+        exit();
+    }
+
+    $username = trim($input["username"] ?? "");
+    $email = trim($input["email"] ?? "");
+    $firstname = trim($input["firstname"] ?? "");
+    $lastname = trim($input["lastname"] ?? "");
+    $address = trim($input["address"] ?? "");
+    $zip = trim($input["zip"] ?? "");
+    $city = trim($input["city"] ?? "");
+    $paymentInfo = trim($input["payment_info"] ?? "");
+    $currentPassword = trim($input["currentPassword"] ?? "");
+
+    if ($currentPassword === "") {
+        echo json_encode([
+            "success" => false,
+            "message" => "Bitte aktuelles Passwort eingeben"
+        ]);
+        exit();
+    }
+
+    if (
+        $username === "" ||
+        $email === "" ||
+        $firstname === "" ||
+        $lastname === "" ||
+        $address === "" ||
+        $zip === "" ||
+        $city === ""
+    ) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Bitte alle Pflichtfelder ausfüllen"
+        ]);
+        exit();
+    }
+
+    if (strlen($username) < 3) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Der Benutzername muss mindestens 3 Zeichen lang sein"
+        ]);
+        exit();
+    }
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Ungültige E-Mail-Adresse"
+        ]);
+        exit();
+    }
+
+    if (!preg_match("/^\d{4}$/", $zip)) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Bitte eine gültige PLZ eingeben"
+        ]);
+        exit();
+    }
+
+    $dbAccess = new DBAccess();
+    $db = $dbAccess->connect();
+
+    $passwordStmt = $db->prepare("
+        SELECT password
+        FROM users
+        WHERE id = :id
+        LIMIT 1
+    ");
+
+    $passwordStmt->bindParam(":id", $_SESSION["user_id"], PDO::PARAM_INT);
+    $passwordStmt->execute();
+
+    $user = $passwordStmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$user || !password_verify($currentPassword, $user["password"])) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Das eingegebene Passwort ist falsch"
+        ]);
+        exit();
+    }
+
+    try {
+        $stmt = $db->prepare("
+            UPDATE users
+            SET
+                username = :username,
+                email = :email,
+                firstname = :firstname,
+                lastname = :lastname,
+                address = :address,
+                zip = :zip,
+                city = :city,
+                payment_info = :paymentInfo
+            WHERE id = :id
+        ");
+
+        $stmt->bindParam(":username", $username);
+        $stmt->bindParam(":email", $email);
+        $stmt->bindParam(":firstname", $firstname);
+        $stmt->bindParam(":lastname", $lastname);
+        $stmt->bindParam(":address", $address);
+        $stmt->bindParam(":zip", $zip);
+        $stmt->bindParam(":city", $city);
+        $stmt->bindParam(":paymentInfo", $paymentInfo);
+        $stmt->bindParam(":id", $_SESSION["user_id"], PDO::PARAM_INT);
+
+        $stmt->execute();
+
+        $_SESSION["username"] = $username;
+
+        echo json_encode([
+            "success" => true,
+            "message" => "Kontodaten wurden gespeichert"
+        ]);
+        exit();
+
+    } catch (PDOException $e) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Benutzername oder E-Mail wird bereits verwendet"
+        ]);
+        exit();
+    }
+}
+
 // Logout
 if ($action === "logout") {
     $_SESSION["cart"] = [];
