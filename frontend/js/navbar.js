@@ -1,7 +1,7 @@
 
 const backendBaseUrl = window.location.pathname.includes("/frontend/sites/")
-    ? "../../backend/logic/"
-    : "../backend/logic/";
+    ? "http://localhost:3000/logic/"
+    : "http://localhost:3000/logic/";
 
 const guestMenu = document.getElementById("guestMenu");
 const userMenu = document.getElementById("userMenu");

@@ -33,7 +33,7 @@ $(document).ready(function () {
         }
 
         $.ajax({
-            url: "../../backend/logic/requestHandler.php",
+            url: "http://localhost:3000/logic/requestHandler.php",
             method: "POST",
             contentType: "application/json",
             dataType: "json",
@@ -82,7 +82,7 @@ $(document).ready(function () {
 
         $.ajax({
 
-            url: "../../backend/logic/requestHandler.php",
+            url: "http://localhost:3000/logic/requestHandler.php",
             method: "POST",
             contentType: "application/json",
             dataType: "json",

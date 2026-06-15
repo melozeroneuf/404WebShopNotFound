@@ -3,7 +3,7 @@ function sendCartAction(action, id = null) {
 
     console.log("Cart Action:", action, id);
 
-    fetch("../../backend/logic/cartHandler.php", {
+    fetch("http://localhost:3000/logic/carthandler.php", {
         method: "POST",
         credentials: "same-origin",
         headers: {
@@ -111,4 +111,15 @@ function renderCart(cart) {
 document.addEventListener("DOMContentLoaded", function () {
     console.log("DOM geladen");
     showCart();
+});
+
+document.getElementById("applyCouponBtn").addEventListener("click", () => {
+    const code = document.getElementById("couponCode").value;
+    
+    if (code === "TEST10") {
+        document.getElementById("couponMessage").innerText = "10€ Gutschein eingelöst!";
+    } else {
+        
+        document.getElementById("couponMessage").innerText = "Ungültiger Gutschein!";
+    }
 });
