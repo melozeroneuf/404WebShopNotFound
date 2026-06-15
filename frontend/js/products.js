@@ -1,5 +1,7 @@
 const productHandlerUrl = "../../backend/logic/productHandler.php";
 
+let allProducts = [];
+
 fetch(productHandlerUrl)
     .then(response => response.json())
     .then(data => {
@@ -10,9 +12,18 @@ fetch(productHandlerUrl)
             return;
         }
 
+        allProducts = data.products;
+        renderProducts(allProducts);
+        setupSearch();
+
+        });
+
+        function renderProducts(products) {
+            const grid = document.getElementById("productsGrid");
+
         let html = "";
 
-        data.products.forEach(product => {
+        products.forEach(product => {
             html += `
                 <div class="slide-product">
                     <div class="slide-product-top">
@@ -42,5 +53,20 @@ fetch(productHandlerUrl)
             `;
         });
 
-        grid.innerHTML = html;
+        grid.innerHTML = html || "<p>Keine Produkte gefunden.</p>";
+}
+
+function setupSearch() {
+    const searchInput = document.getElementById("productSearch");
+    if (!searchInput) return;
+    
+    searchInput.addEventListener("input", () => {
+        const searchText = searchInput.value.toLowerCase();
+        const filteredProducts = allProducts.filter(product =>
+            product.name.toLowerCase().includes(searchText) ||
+            product.description.toLowerCase().includes(searchText)
+        );
+        
+        renderProducts(filteredProducts);
     });
+}
