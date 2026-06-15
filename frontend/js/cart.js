@@ -115,11 +115,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.getElementById("applyCouponBtn").addEventListener("click", () => {
     const code = document.getElementById("couponCode").value;
-    
-    if (code === "TEST10") {
-        document.getElementById("couponMessage").innerText = "10€ Gutschein eingelöst!";
-    } else {
-        
-        document.getElementById("couponMessage").innerText = "Ungültiger Gutschein!";
-    }
+
+    fetch("../../backend/logic/couponHandler.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ code: code })
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById("couponMessage").innerText = data.message;
+    });
 });
