@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Mein Konto</title>
+
+    <!-- Hauptstylesheet der Website -->
     <link rel="stylesheet" href="../res/css/style.css">
 </head>
 
@@ -11,14 +13,17 @@
 
 <main class="account-page">
 
+    <!-- Container für die Kontoverwaltung -->
     <section class="account-card">
 
+        <!-- Illustrationsbild der Kontoseite -->
         <div class="account-image">
             <img src="../img/account-chrome.png" alt="Konto Illustration">
         </div>
 
         <div class="account-content">
 
+            <!-- Seitenkopf mit Titel und Zurück-Button -->
             <div class="page-header-row">
                 <h2>Mein Konto</h2>
                 <a class="cart-back" href="../index.html">Zurück zum Shop</a>
@@ -26,6 +31,7 @@
 
             <p class="account-subtitle">Verwalte deine persönlichen Daten.</p>
 
+            <!-- Formular für Kontodaten -->
             <form id="accountForm" class="account-form">
 
                 <div class="form-group">
@@ -38,6 +44,7 @@
                     <input type="email" id="email" name="email">
                 </div>
 
+                <!-- Vor- und Nachname -->
                 <div class="form-row">
                     <div class="form-group">
                         <label for="firstname">Vorname</label>
@@ -55,6 +62,7 @@
                     <input type="text" id="address" name="address">
                 </div>
 
+                <!-- PLZ und Ort -->
                 <div class="form-row">
                     <div class="form-group">
                         <label for="zip">PLZ</label>
@@ -67,12 +75,15 @@
                     </div>
                 </div>
 
+                <!-- Zahlungsinformationen des Benutzers -->
                 <div class="form-group">
                     <label for="paymentInfo">Zahlungsinformation</label>
                     <input type="text" id="paymentInfo" name="paymentInfo">
                 </div>
 
+                <!-- Bereich zum Ändern des Passworts -->
                 <div class="password-toggle-box">
+
                     <button type="button" id="togglePasswordChange" class="password-toggle-btn">
                         Passwort ändern
                     </button>
@@ -90,33 +101,44 @@
                                 <label for="newPasswordRepeat">
                                     Neues Passwort wiederholen
                                 </label>
-                                <input type="password"
-                                       id="newPasswordRepeat"
-                                       name="newPasswordRepeat">
+
+                                <input
+                                        type="password"
+                                        id="newPasswordRepeat"
+                                        name="newPasswordRepeat">
                             </div>
 
                         </div>
 
                     </div>
+
                 </div>
 
+                <!-- Aktuelles Passwort zur Bestätigung von Änderungen -->
                 <div class="form-group">
+
                     <label for="currentPassword">
                         Aktuelles Passwort (für Änderungen erforderlich)
                     </label>
 
-                    <input type="password"
-                           id="currentPassword"
-                           name="currentPassword"
-                           placeholder="Aktuelles Passwort eingeben">
+                    <input
+                            type="password"
+                            id="currentPassword"
+                            name="currentPassword"
+                            placeholder="Aktuelles Passwort eingeben">
+
                 </div>
 
+                <!-- Ausgabe von Erfolgs- oder Fehlermeldungen -->
                 <p id="accountMessage" class="account-message"></p>
 
+                <!-- Formularaktionen -->
                 <div class="account-actions">
+
                     <button type="submit" class="save-btn">
                         Änderungen speichern
                     </button>
+
                 </div>
 
             </form>
@@ -127,7 +149,10 @@
 
 </main>
 
+<!-- jQuery Bibliothek -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- JavaScript für die Kontoverwaltung -->
 <script src="../js/account.js"></script>
 
 </body>

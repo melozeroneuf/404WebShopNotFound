@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
     <meta charset="UTF-8">
     <title>Warenkorb</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Hauptstylesheet der Website -->
     <link rel="stylesheet" href="../res/css/style.css">
 </head>
+
 <body>
 
 <main class="cart-page">
+
+    <!-- Warenkorb-Inhalt -->
     <section class="cart-box cart-box-full">
 
         <div class="cart-header">
@@ -21,16 +27,19 @@
             <a class="cart-back" href="../index.html">Zurück zum Shop</a>
         </div>
 
+        <!-- Produkte im Warenkorb werden per JavaScript geladen -->
         <div id="cart" class="cart-content">
             <p class="cart-empty">Dein Warenkorb wird geladen.</p>
         </div>
 
+        <!-- Eingabe für Gutscheincodes -->
         <div class="coupon-box">
             <input type="text" id="couponCode" placeholder="Gutscheincode">
             <button id="applyCouponBtn">Einlösen</button>
             <p id="couponMessage"></p>
         </div>
 
+        <!-- Gesamtpreis und Checkout-Button -->
         <div class="cart-footer">
             <div class="cart-summary">
                 <span>Gesamt</span>
@@ -43,8 +52,10 @@
         </div>
 
     </section>
+
 </main>
 
+<!-- JavaScript für Warenkorb-Funktionen -->
 <script src="../js/cart.js"></script>
 </body>
 </html>
