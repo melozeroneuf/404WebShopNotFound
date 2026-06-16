@@ -6,6 +6,7 @@ header("Content-Type: application/json");
 
 require_once "../config/dbaccess.php";
 
+// Prüft, ob ein Benutzer eingeloggt ist und Adminrechte besitzt
 if (!isset($_SESSION["user_id"]) || ($_SESSION["role"] ?? "") !== "admin") {
     echo json_encode([
         "success" => false,
@@ -14,8 +15,10 @@ if (!isset($_SESSION["user_id"]) || ($_SESSION["role"] ?? "") !== "admin") {
     exit();
 }
 
+// Content-Type auslesen, damit JSON und FormData unterstützt werden
 $contentType = $_SERVER["CONTENT_TYPE"] ?? "";
 
+// Bei Datei-Uploads kommen die Daten über $_POST, sonst als JSON
 if (strpos($contentType, "multipart/form-data") !== false) {
     $input = $_POST;
 } else {
@@ -26,13 +29,17 @@ if (strpos($contentType, "multipart/form-data") !== false) {
     }
 }
 
+// Gewünschte Aktion aus der Anfrage holen
 $action = $input["action"] ?? "";
 
+// Datenbankverbindung herstellen
 $dbAccess = new DBAccess();
 $db = $dbAccess->connect();
 
+// Produktbild hochladen und den Dateinamen zurückgeben
 function uploadProductImage($currentImage = "")
 {
+    // Falls kein neues Bild hochgeladen wurde, bleibt das bisherige Bild erhalten
     if (!isset($_FILES["imageFile"]) || $_FILES["imageFile"]["error"] !== UPLOAD_ERR_OK) {
         return $currentImage;
     }
@@ -42,12 +49,14 @@ function uploadProductImage($currentImage = "")
     $originalName = basename($_FILES["imageFile"]["name"]);
     $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
 
+    // Nur sichere Bildformate erlauben
     $allowedExtensions = ["jpg", "jpeg", "png", "webp"];
 
     if (!in_array($extension, $allowedExtensions)) {
         return $currentImage;
     }
 
+    // Eindeutigen Dateinamen erzeugen, damit keine alten Bilder überschrieben werden
     $newFileName = "product_" . time() . "_" . rand(1000, 9999) . "." . $extension;
     $targetPath = $uploadDir . $newFileName;
 
@@ -56,6 +65,7 @@ function uploadProductImage($currentImage = "")
     return $newFileName;
 }
 
+// Alle Benutzer für die Adminverwaltung laden
 if ($action === "getUsers") {
     $stmt = $db->prepare("
         SELECT id, username, email, role, is_active, created_at
@@ -71,10 +81,12 @@ if ($action === "getUsers") {
     exit();
 }
 
+// Rolle eines Benutzers ändern
 if ($action === "updateRole") {
     $userId = (int) ($input["userId"] ?? 0);
     $role = $input["role"] ?? "customer";
 
+    // Nur vorhandene Rollen zulassen
     if (!in_array($role, ["customer", "admin"])) {
         echo json_encode([
             "success" => false,
@@ -100,6 +112,7 @@ if ($action === "updateRole") {
     exit();
 }
 
+// Benutzer aktivieren oder deaktivieren
 if ($action === "updateUserStatus") {
 
     $userId = (int) ($input["userId"] ?? 0);
@@ -124,9 +137,11 @@ if ($action === "updateUserStatus") {
     exit();
 }
 
+// Benutzer aus der Datenbank löschen
 if ($action === "deleteUser") {
     $userId = (int) ($input["userId"] ?? 0);
 
+    // Verhindert, dass ein Admin sein eigenes Konto löscht
     if ($userId === (int) $_SESSION["user_id"]) {
         echo json_encode([
             "success" => false,
@@ -150,9 +165,10 @@ if ($action === "deleteUser") {
     exit();
 }
 
+// Alle Produkte für die Adminübersicht laden
 if ($action === "getProducts") {
     $stmt = $db->prepare("
-        SELECT 
+        SELECT
             id,
             name,
             description,
@@ -173,6 +189,7 @@ if ($action === "getProducts") {
     exit();
 }
 
+// Neues Produkt anlegen
 if ($action === "createProduct") {
     $name = trim($input["name"] ?? "");
     $description = trim($input["description"] ?? "");
@@ -182,6 +199,7 @@ if ($action === "createProduct") {
     $image = uploadProductImage(trim($input["image"] ?? ""));
     $isActive = (int) ($input["is_active"] ?? 1);
 
+    // Produktname und Preis sind Pflichtfelder
     if ($name === "" || $price <= 0) {
         echo json_encode([
             "success" => false,
@@ -191,7 +209,7 @@ if ($action === "createProduct") {
     }
 
     $stmt = $db->prepare("
-        INSERT INTO products 
+        INSERT INTO products
             (name, description, category, price, rating, image, is_active)
         VALUES
             (:name, :description, :category, :price, :rating, :image, :is_active)
@@ -213,6 +231,7 @@ if ($action === "createProduct") {
     exit();
 }
 
+// Bestehendes Produkt bearbeiten
 if ($action === "updateProduct") {
     $productId = (int) ($input["productId"] ?? 0);
     $name = trim($input["name"] ?? "");
@@ -223,6 +242,7 @@ if ($action === "updateProduct") {
     $image = uploadProductImage(trim($input["image"] ?? ""));
     $isActive = (int) ($input["is_active"] ?? 1);
 
+    // Prüfen, ob die wichtigsten Produktdaten gültig sind
     if ($productId <= 0 || $name === "" || $price <= 0) {
         echo json_encode([
             "success" => false,
@@ -233,7 +253,7 @@ if ($action === "updateProduct") {
 
     $stmt = $db->prepare("
         UPDATE products
-        SET 
+        SET
             name = :name,
             description = :description,
             category = :category,
@@ -261,9 +281,11 @@ if ($action === "updateProduct") {
     exit();
 }
 
+// Produkt aus der Datenbank löschen
 if ($action === "deleteProduct") {
     $productId = (int) ($input["productId"] ?? 0);
 
+    // Ohne gültige Produkt-ID darf nichts gelöscht werden
     if ($productId <= 0) {
         echo json_encode([
             "success" => false,
@@ -287,9 +309,10 @@ if ($action === "deleteProduct") {
     exit();
 }
 
+// Alle Bestellungen mit Benutzerdaten laden
 if ($action === "getOrders") {
     $stmt = $db->prepare("
-        SELECT 
+        SELECT
             orders.id,
             orders.user_id,
             users.username,
@@ -311,10 +334,12 @@ if ($action === "getOrders") {
     exit();
 }
 
+// Status einer Bestellung ändern
 if ($action === "updateOrderStatus") {
     $orderId = (int) ($input["orderId"] ?? 0);
     $status = $input["status"] ?? "offen";
 
+    // Nur diese Bestellstatus sind erlaubt
     $allowedStatus = ["offen", "bezahlt", "versendet", "storniert"];
 
     if ($orderId <= 0 || !in_array($status, $allowedStatus)) {
@@ -342,6 +367,7 @@ if ($action === "updateOrderStatus") {
     exit();
 }
 
+// Einzelne Produkte einer Bestellung laden
 if ($action === "getOrderDetails") {
 
     $orderId = (int) ($input["orderId"] ?? 0);
@@ -367,6 +393,7 @@ if ($action === "getOrderDetails") {
     exit();
 }
 
+// Alle Gutscheine für die Adminübersicht laden
 if ($action === "getCoupons") {
     $stmt = $db->prepare("
         SELECT id, code, value, expires_at
@@ -383,12 +410,14 @@ if ($action === "getCoupons") {
     exit();
 }
 
+// Neuen Gutschein erstellen
 if ($action === "createCoupon") {
 
     $code = trim($input["code"] ?? "");
     $value = (int) ($input["value"] ?? 0);
     $expiresAt = trim($input["expires_at"] ?? "");
 
+    // Gutschein muss einen Code, einen gültigen Prozentwert und ein Ablaufdatum haben
     if ($code === "" || $value <= 0 || $value > 100 || $expiresAt === "") {
         echo json_encode([
             "success" => false,
@@ -416,6 +445,7 @@ if ($action === "createCoupon") {
     exit();
 }
 
+// Falls keine der bekannten Aktionen passt
 echo json_encode([
     "success" => false,
     "message" => "Unbekannte Aktion"
