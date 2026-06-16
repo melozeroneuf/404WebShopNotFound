@@ -1,3 +1,4 @@
+// cart-drawer.js — Kleiner Warenkorb-Drawer: lädt/zeigt Items und Aktionen
 const cartDrawerBtn = document.getElementById("cartDrawerBtn");
 const cartDrawer = document.getElementById("cartDrawer");
 const cartOverlay = document.getElementById("cartOverlay");
@@ -8,17 +9,20 @@ const cartDrawerUrl =  "/404webshopnotfound/backend/logic/cartHandler.php"
 
 let currentCartCount = 0;
 
+// Öffnet den Drawer und lädt die aktuellen Warenkorb-Daten
 function openCartDrawer() {
     cartDrawer.classList.add("active");
     cartOverlay.classList.add("active");
     loadCartDrawer();
 }
 
+// Schließt den Drawer (UI)
 function closeCartDrawer() {
     cartDrawer.classList.remove("active");
     cartOverlay.classList.remove("active");
 }
 
+// Sendet eine Aktion an das Cart-Backend (get/increase/decrease/remove)
 function sendDrawerCartAction(action, id = null) {
     fetch(cartDrawerUrl, {
         method: "POST",
@@ -37,10 +41,12 @@ function sendDrawerCartAction(action, id = null) {
         });
 }
 
+// Hilfsfunktion: lädt Drawer-Inhalt vom Server
 function loadCartDrawer() {
     sendDrawerCartAction("get");
 }
 
+// Rendert den Drawer-Inhalt (Item-Liste, Mengen, Gesamt)
 function renderCartDrawer(cart) {
 
     currentCartCount = 0;
@@ -108,6 +114,7 @@ function renderCartDrawer(cart) {
     updateCartCount(itemCount);
 }
 
+// Aktualisiert die sichtbare Warenkorb-Anzahl im Navbar-Icon
 function updateCartCount(count) {
     const cartCountElement = document.getElementById("cartCount");
     if (cartCountElement) {
@@ -115,6 +122,7 @@ function updateCartCount(count) {
         cartCountElement.style.display = count > 0 ? "inline-flex" : "none";
     }
 }
+// Klick-Handler für Checkout-Button: prüft, ob Items vorhanden sind
 function checkoutClick() {
     const message = document.getElementById("checkoutMessage");
     const countElement = document.getElementById("cartCount");

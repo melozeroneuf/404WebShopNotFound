@@ -1,4 +1,5 @@
 
+// navbar.js — Navigation: Login-Status prüfen, Menüs anpassen, Logout
 const backendBaseUrl = "/404webshopnotfound/backend/logic/";
 
 
@@ -6,6 +7,7 @@ const guestMenu = document.getElementById("guestMenu");
 const userMenu = document.getElementById("userMenu");
 const welcomeUser = document.getElementById("welcomeUser");
 
+// Prüft, ob der Nutzer eingeloggt ist und passt Navbar entsprechend an
 fetch(backendBaseUrl + "checkLogin.php")
     .then(response => response.json())
     .then(data => {
@@ -75,6 +77,7 @@ fetch(backendBaseUrl + "checkLogin.php")
 const accountBtn = document.getElementById("accountBtn");
 const accountDropdown = document.getElementById("accountDropdown");
 
+// Account-Button: öffnet/schließt das Dropdown, Klick außerhalb schließt
 if (accountBtn && accountDropdown) {
 
     accountBtn.addEventListener("click", function (e) {
