@@ -202,6 +202,7 @@
                 if (!data.loggedIn) {
                     window.location.href = "login.html";
                 } else {
+                    loadUserData();
                     loadCart();
                 }
             });
@@ -223,6 +224,22 @@
                 document.getElementById("checkoutForm").style.display = "none";
             }
         });
+    }
+
+    function loadUserData() {
+        fetch(backendBaseUrl + "getUserData.php")
+            .then(r => r.json())
+            .then(data => {
+                if (data.success && data.user) {
+                    document.getElementById("firstname").value = data.user.firstname || "";
+                    document.getElementById("lastname").value = data.user.lastname || "";
+                    document.getElementById("email").value = data.user.email || "";
+                    document.getElementById("address").value = data.user.address || "";
+                    document.getElementById("zip").value = data.user.zip || "";
+                    document.getElementById("city").value = data.user.city || "";
+                }
+            })
+            .catch(err => console.error(err));
     }
 
     function showCartSummary(cart) {
