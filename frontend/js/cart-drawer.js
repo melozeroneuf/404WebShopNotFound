@@ -44,16 +44,19 @@ function renderCartDrawer(cart) {
         cartDrawerContent.innerHTML = `
             <p class="cart-drawer-info">ⓘ Ihr Warenkorb ist leer.</p>
         `;
+        updateCartCount(0);
         return;
     }
 
     let html = "";
     let total = 0;
+    let itemCount = 0;
 
     cart.forEach(item => {
         const price = parseFloat(item.price);
         const quantity = parseInt(item.quantity);
         const itemTotal = price * quantity;
+        itemCount += quantity;
 
         total += itemTotal;
 
@@ -86,6 +89,15 @@ function renderCartDrawer(cart) {
     html += `<strong>Gesamt: ${total.toFixed(2)} €</strong>`;
 
     cartDrawerContent.innerHTML = html;
+    updateCartCount(itemCount);
+}
+
+function updateCartCount(count) {
+    const cartCountElement = document.getElementById("cartCount");
+    if (cartCountElement) {
+        cartCountElement.textContent = count;
+        cartCountElement.style.display = count > 0 ? "inline-flex" : "none";
+    }
 }
 
 if (cartDrawerBtn) {
@@ -99,3 +111,8 @@ if (cartDrawerClose) {
 if (cartOverlay) {
     cartOverlay.addEventListener("click", closeCartDrawer);
 }
+
+// Lade Warenkorb-Anzahl beim Laden der Seite
+document.addEventListener("DOMContentLoaded", function() {
+    sendDrawerCartAction("get");
+});

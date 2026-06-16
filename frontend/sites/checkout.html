@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="../res/css/style.css">
+    <style>
+        .checkout-container {
+            max-width: 900px;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 30px;
+            padding: 0 20px;
+        }
+
+        @media (max-width: 768px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .checkout-form {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+        }
+
+        .checkout-form h1 {
+            margin-top: 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 12px;
+            background: black;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .checkout-btn:hover {
+            background: #333;
+        }
+
+        .summary-box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            height: fit-content;
+        }
+
+        .summary-box h2 {
+            margin-top: 0;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            font-size: 18px;
+            font-weight: bold;
+            border-top: 2px solid #333;
+            margin-top: 10px;
+        }
+
+        .error {
+            color: #c33;
+            background: #fee;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .success {
+            color: #3c3;
+            background: #efe;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<main>
+    <div class="checkout-container">
+
+        <div class="checkout-form">
+            <h1>Bestellung abschließen</h1>
+            <div id="message"></div>
+
+            <form id="checkoutForm">
+                <div class="form-group">
+                    <label>Vorname *</label>
+                    <input type="text" id="firstname" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Nachname *</label>
+                    <input type="text" id="lastname" required>
+                </div>
+
+                <div class="form-group">
+                    <label>E-Mail *</label>
+                    <input type="email" id="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Adresse *</label>
+                    <input type="text" id="address" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>PLZ *</label>
+                        <input type="text" id="zip" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Stadt *</label>
+                        <input type="text" id="city" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="checkout-btn">Bestellung absenden</button>
+            </form>
+        </div>
+
+        <div class="summary-box">
+            <h2>Bestellübersicht</h2>
+            <div id="cartSummary">
+                <p>Warenkorb wird geladen...</p>
+            </div>
+
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+                <input type="text" id="couponCode" placeholder="Rabattcode" style="width: 100%; padding: 8px; margin-bottom: 8px; box-sizing: border-box;">
+                <button onclick="applyCoupon()" style="width: 100%; padding: 8px; background: #f0f0f0; border: 1px solid #ddd; border-radius: 4px; cursor: pointer;">Einlösen</button>
+                <p id="couponMessage" style="font-size: 12px; margin-top: 8px;"></p>
+            </div>
+
+            <div class="summary-total">
+                <span>Subtotal:</span>
+                <span id="subtotalPrice">0,00 €</span>
+            </div>
+            <div id="discountLine" class="summary-item" style="display: none;">
+                <span>Rabatt:</span>
+                <span style="text-align: right; color: #28a745;"><strong id="discountAmount">-0,00 €</strong></span>
+            </div>
+            <div class="summary-total">
+                <span>Gesamt:</span>
+                <span id="totalPrice">0,00 €</span>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+    const backendBaseUrl = "/404webshopnotfound/backend/logic/";
+    let currentDiscount = 0;
+    let currentCart = [];
+
+    // Login Check beim Laden
+    window.addEventListener('load', function() {
+        fetch(backendBaseUrl + "checkLogin.php")
+            .then(r => r.json())
+            .then(data => {
+                if (!data.loggedIn) {
+                    window.location.href = "login.html";
+                } else {
+                    loadCart();
+                }
+            });
+    });
+
+    function loadCart() {
+        fetch(backendBaseUrl + "carthandler.php", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({action: "get"})
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && data.cart && data.cart.length > 0) {
+                currentCart = data.cart;
+                showCartSummary(data.cart);
+            } else {
+                document.getElementById("cartSummary").innerHTML = "<p>Warenkorb ist leer</p>";
+                document.getElementById("checkoutForm").style.display = "none";
+            }
+        });
+    }
+
+    function showCartSummary(cart) {
+        let html = "";
+        let total = 0;
+
+        cart.forEach(item => {
+            const price = parseFloat(item.price);
+            const qty = parseInt(item.quantity);
+            const itemTotal = price * qty;
+            total += itemTotal;
+
+            html += `
+                <div class="summary-item">
+                    <div>
+                        <strong>${item.name}</strong><br>
+                        <small>${qty}x @ ${price.toFixed(2)}€</small>
+                    </div>
+                    <div style="text-align: right;">
+                        <strong>${itemTotal.toFixed(2)}€</strong>
+                    </div>
+                </div>
+            `;
+        });
+
+        document.getElementById("cartSummary").innerHTML = html;
+        updateTotal(total);
+    }
+
+    function updateTotal(subtotal) {
+        const discount = subtotal * currentDiscount / 100;
+        const total = subtotal - discount;
+
+        document.getElementById("subtotalPrice").textContent = subtotal.toFixed(2).replace(".", ",") + " €";
+        document.getElementById("totalPrice").textContent = total.toFixed(2).replace(".", ",") + " €";
+
+        if (currentDiscount > 0) {
+            document.getElementById("discountLine").style.display = "flex";
+            document.getElementById("discountAmount").textContent = "-" + discount.toFixed(2).replace(".", ",") + " €";
+        }
+    }
+
+    function applyCoupon() {
+        const code = document.getElementById("couponCode").value.trim();
+        if (!code) {
+            document.getElementById("couponMessage").textContent = "Bitte Code eingeben";
+            return;
+        }
+
+        fetch(backendBaseUrl + "couponHandler.php", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({code: code})
+        })
+        .then(r => r.json())
+        .then(data => {
+            const msg = document.getElementById("couponMessage");
+            if (data.success) {
+                currentDiscount = parseFloat(data.value);
+                msg.textContent = "✓ Rabatt: " + data.value + "%";
+                msg.style.color = "#28a745";
+                
+                let total = 0;
+                currentCart.forEach(item => {
+                    total += parseFloat(item.price) * parseInt(item.quantity);
+                });
+                updateTotal(total);
+            } else {
+                currentDiscount = 0;
+                msg.textContent = "✗ " + data.message;
+                msg.style.color = "#c33";
+                document.getElementById("discountLine").style.display = "none";
+                
+                let total = 0;
+                currentCart.forEach(item => {
+                    total += parseFloat(item.price) * parseInt(item.quantity);
+                });
+                updateTotal(total);
+            }
+        });
+    }
+
+    // Formular absenden
+    document.getElementById("checkoutForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        const data = {
+            firstname: document.getElementById("firstname").value,
+            lastname: document.getElementById("lastname").value,
+            email: document.getElementById("email").value,
+            address: document.getElementById("address").value,
+            zip: document.getElementById("zip").value,
+            city: document.getElementById("city").value,
+            discount: currentDiscount
+        };
+
+        fetch(backendBaseUrl + "checkoutHandler.php", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(data)
+        })
+        .then(r => r.json())
+        .then(result => {
+            if (result.success) {
+                document.getElementById("message").innerHTML = '<div class="success">✓ Bestellung erfolgreich!</div>';
+                setTimeout(() => {
+                    window.location.href = "warenkorb.html";
+                }, 2000);
+            } else {
+                document.getElementById("message").innerHTML = '<div class="error">✗ ' + result.message + '</div>';
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
