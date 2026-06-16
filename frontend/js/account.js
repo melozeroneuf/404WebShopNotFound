@@ -1,3 +1,5 @@
+// account.js — Account-Seite: lädt und speichert Nutzerdaten
+// Kurze Kommentare über wichtigen Funktionen für schnelle Orientierung.
 $(document).ready(function () {
 
     loadAccountData();
@@ -6,6 +8,7 @@ $(document).ready(function () {
         $("#passwordChangeBox").toggleClass("hidden");
     });
 
+    // Lädt Account-Daten vom Backend und füllt das Formular
     function loadAccountData() {
         $.ajax({
             url: "../../backend/logic/requestHandler.php",
@@ -40,6 +43,7 @@ $(document).ready(function () {
         });
     }
 
+    // Submit-Handler für das Account-Formular: sendet Änderungen an Backend
     $("#accountForm").on("submit", function (event) {
         event.preventDefault();
 

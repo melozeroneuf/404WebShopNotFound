@@ -1,7 +1,9 @@
+// shop.js — Handhabt 'In den Warenkorb' Buttons per Event-Delegation
 console.log("shop.js wurde geladen");
 
 const cartHandlerUrl = "/404webshopnotfound/backend/logic/cartHandler.php"
 
+// Event-Delegation: reagiert auf Klicks auf `.add-to-cart-btn`
 document.addEventListener("click", function (event) {
     const button = event.target.closest(".add-to-cart-btn");
 

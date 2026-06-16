@@ -1,9 +1,11 @@
+// auth.js — Registrierung und Login (Frontend-Validierung + AJAX)
 console.log("auth.js wurde geladen");
 
 $(document).ready(function () {
 
     console.log("jQuery läuft");
 
+    // Registrierungs-Handler: Validiert Eingaben und sendet an Backend
     $("#registerForm").on("submit", function (event) {
         event.preventDefault();
 
@@ -128,6 +130,7 @@ $(document).ready(function () {
         });
     });
 
+    // Login-Handler: sendet Anmelde-Daten an Backend und zeigt Ergebnis
     $("#loginForm").on("submit", function (event) {
 
         event.preventDefault();

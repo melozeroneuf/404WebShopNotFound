@@ -1,3 +1,6 @@
+// wishlist.js — Merkliste / Favoriten-Handling
+// Kurz: lokal in `localStorage` speichern, bei eingeloggten Nutzern mit
+// dem Backend synchronisieren. Kommentare bei jeder Funktion erklären Zweck.
 console.log("wishlist.js wurde geladen");
 
 const wishlistStorageKey = "wishlistItems";
@@ -8,6 +11,8 @@ const checkLoginUrl = "/404webshopnotfound/backend/logic/checkLogin.php";
 
 let isUserLoggedIn = false;
 
+// Lokaler Produkt-Cache für Anzeigezwecke der Merkliste.
+// In einer echten Anwendung sollten diese Daten per API geladen werden.
 const productCatalog = {
     1: {
         id: 1,
@@ -64,6 +69,7 @@ const productCatalog = {
     }
 };
 
+// Liest die Merkliste aus localStorage (sicher mit try/catch)
 function getWishlistItems() {
     try {
         const raw = localStorage.getItem(wishlistStorageKey);
@@ -74,10 +80,12 @@ function getWishlistItems() {
     }
 }
 
+// Schreibt Merkliste in localStorage
 function setWishlistItems(items) {
     localStorage.setItem(wishlistStorageKey, JSON.stringify(items));
 }
 
+// Aktualisiert das Herz-Icon eines Buttons (bi-heart / bi-heart-fill)
 function updateWishlistIcon(button, isActive) {
     const icon = button.querySelector("i");
     if (!icon) {
@@ -87,10 +95,13 @@ function updateWishlistIcon(button, isActive) {
     icon.classList.toggle("bi-heart-fill", isActive);
 }
 
+// Prüft, ob ein Produkt als "ausverkauft" markiert ist (data-Attribut)
 function isSoldOut(button) {
     return button.dataset.soldOut === "true";
 }
 
+// Wendet aktuellen Merkliste-Zustand auf Buttons und Badge an
+// (Icon-Update + Rendern der Merkliste-Seite)
 function applyWishlistState(items) {
     const itemSet = new Set(items);
     document.querySelectorAll(".wishlist-btn").forEach(button => {
@@ -107,6 +118,7 @@ function applyWishlistState(items) {
     renderWishlistPage(items);
 }
 
+// Rendert die Merkliste-Seite: Produktkacheln aus dem `productCatalog`
 function renderWishlistPage(items) {
     const container = document.getElementById("wishlistItems");
     if (!container) {
@@ -169,6 +181,8 @@ function renderWishlistPage(items) {
     container.innerHTML = html;
 }
 
+// Prüft asynchron, ob der Nutzer eingeloggt ist. Erwartet Backend-Antwort
+// z.B. { loggedIn: true }
 async function fetchLoginStatus() {
     try {
         const response = await fetch(checkLoginUrl);
@@ -181,6 +195,8 @@ async function fetchLoginStatus() {
     }
 }
 
+// Kommuniziert mit dem Backend für serverseitige Merkliste-Aktionen
+// (action: 'get'|'toggle', itemId optional)
 async function fetchWishlist(action, itemId) {
     try {
         const response = await fetch(wishlistHandlerUrl, {
@@ -194,8 +210,9 @@ async function fetchWishlist(action, itemId) {
                 id: itemId
             })
         });
-
         const data = await response.json();
+
+        // Bei Erfolg: IDs als Strings zurückgeben (konsistente Typen)
         if (data.success && Array.isArray(data.items)) {
             return data.items.map(String);
         }
@@ -206,6 +223,9 @@ async function fetchWishlist(action, itemId) {
     }
 }
 
+// Toggle-Funktion: setzt/entfernt ein Item in der Merkliste.
+// Wenn eingeloggt -> versuche Server-Toggle und nutze Server-Antwort;
+// ansonsten verwalte Merkliste lokal in localStorage.
 function toggleWishlist(button) {
     if (isSoldOut(button)) {
         return;
@@ -249,6 +269,7 @@ function toggleWishlist(button) {
     applyWishlistState(items);
 }
 
+// Initialisiert Event-Listener für Heart-Buttons und Synchronisation
 function initWishlistButtons() {
     const items = getWishlistItems();
     applyWishlistState(items);
@@ -305,6 +326,7 @@ function initWishlistButtons() {
         });
     }
 
+    // Wenn eingeloggt: serverseitige Merkliste holen und lokal übernehmen
     fetchLoginStatus().then(loggedIn => {
         if (!loggedIn) {
             return;

@@ -1,3 +1,5 @@
+// admin.js — Admin-Panel: Benutzer, Produkte, Bestellungen, Gutscheine verwalten
+// Kommentare vor jeder Funktion erklären kurz Zweck und Verhalten.
 console.log("admin.js wurde geladen");
 
 let currentlyEditedProduct = null;
@@ -21,6 +23,7 @@ const couponsTableBody = document.getElementById("couponsTableBody");
 const couponForm = document.getElementById("couponForm");
 const generateCouponBtn = document.getElementById("generateCouponBtn");
 
+// Zeigt eine kurze Admin-Nachricht (Status/Fehlermeldung)
 function showAdminMessage(message) {
     if (adminMessage) {
         adminMessage.innerText = message;
@@ -31,6 +34,7 @@ function showAdminMessage(message) {
    BENUTZER
 ========================= */
 
+// Lädt Benutzerliste vom Server und rendert sie
 function loadUsers() {
     fetch(adminHandlerUrl, {
         method: "POST",
@@ -59,6 +63,7 @@ function loadUsers() {
         });
 }
 
+// Rendert die Benutzer-Tabelle mit Role/Status Controls
 function renderUsers(users) {
     if (!users || users.length === 0) {
         usersTableBody.innerHTML = `<tr><td colspan="6">Keine Benutzer gefunden.</td></tr>`;
@@ -117,6 +122,7 @@ function renderUsers(users) {
         usersTableBody.appendChild(tr);
     });
 }
+// Aktualisiert die Rolle eines Benutzers via Backend
 function updateUserRole(userId, role) {
     fetch(adminHandlerUrl, {
         method: "POST",
@@ -137,6 +143,7 @@ function updateUserRole(userId, role) {
         });
 }
 
+// Löscht einen Benutzer (zeigt Bestätigungsdialog)
 function deleteUser(userId) {
     if (!confirm("Benutzer wirklich löschen?")) {
         return;
@@ -164,6 +171,7 @@ function deleteUser(userId) {
    PRODUKTE
 ========================= */
 
+// Lädt Produktliste für die Admin-Übersicht
 function loadProducts() {
     fetch(adminHandlerUrl, {
         method: "POST",
@@ -191,6 +199,7 @@ function loadProducts() {
             productsTableBody.innerHTML = `<tr><td colspan="8">Fehler beim Laden der Produkte.</td></tr>`;
         });
 }
+// Lädt Bestellungen für die Admin-Übersicht
 function loadOrders() {
 
     fetch(adminHandlerUrl, {
@@ -218,6 +227,7 @@ function loadOrders() {
         });
 }
 
+// Rendert Bestellungen in der Orders-Tabelle
 function renderOrders(orders) {
 
     if (!orders || orders.length === 0) {
@@ -262,6 +272,7 @@ function renderOrders(orders) {
     ordersTableBody.innerHTML = html;
 }
 
+// Rendert die Produktliste in der Admin-Tabelle
 function renderProducts(products) {
     if (!products || products.length === 0) {
         productsTableBody.innerHTML = `<tr><td colspan="8">Keine Produkte gefunden.</td></tr>`;
@@ -299,6 +310,7 @@ function renderProducts(products) {
     });
 }
 
+// Öffnet das Formular zum Bearbeiten eines Produkts und füllt Werte
 function editProduct(product) {
 
     if (
@@ -330,6 +342,7 @@ function editProduct(product) {
     });
 }
 
+// Löscht ein Produkt nach Bestätigung (Backend-Aufruf)
 function deleteProduct(productId) {
     if (!confirm("Produkt wirklich löschen?")) {
         return;
@@ -353,6 +366,7 @@ function deleteProduct(productId) {
         });
 }
 
+// Setzt Aktiv-/Inaktiv-Status eines Benutzers
 function updateUserStatus(userId, status) {
 
     fetch(adminHandlerUrl, {
@@ -374,6 +388,7 @@ function updateUserStatus(userId, status) {
         });
 }
 
+// Aktualisiert Status einer Bestellung (offen/bezahlt/versendet/storniert)
 function updateOrderStatus(orderId, status) {
     fetch(adminHandlerUrl, {
         method: "POST",
@@ -394,6 +409,7 @@ function updateOrderStatus(orderId, status) {
         });
 }
 
+// Lädt und zeigt Details zu einer Bestellung (Items)
 function loadOrderDetails(orderId) {
 
     if (
@@ -448,6 +464,7 @@ function loadOrderDetails(orderId) {
         });
 }
 
+// Lädt Gutscheine vom Backend
 function loadCoupons() {
     fetch(adminHandlerUrl, {
         method: "POST",
@@ -471,6 +488,7 @@ function loadCoupons() {
         });
 }
 
+// Rendert die Gutschein-Tabelle
 function renderCoupons(coupons) {
     if (!coupons || coupons.length === 0) {
         couponsTableBody.innerHTML =
@@ -493,6 +511,7 @@ function renderCoupons(coupons) {
 
     couponsTableBody.innerHTML = html;
 }
+// Erzeugt einen zufälligen Gutschein-Code und füllt das Eingabefeld
 function generateCouponCode() {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     let code = "SHOP";

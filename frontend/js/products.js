@@ -1,7 +1,9 @@
+// products.js — Lädt Produktdaten, rendert Grid und bietet clientseitige Suche
 const productHandlerUrl = "/404webshopnotfound/backend/logic/productHandler.php";
 
 let allProducts = [];
 
+// Lade Produktliste vom Backend und initialisiere Suche/Rendering
 fetch(productHandlerUrl)
     .then(response => response.json())
     .then(data => {
@@ -28,6 +30,7 @@ fetch(productHandlerUrl)
 
         });
 
+        // Rendert Produkt-Kacheln im Grid
         function renderProducts(products) {
             const grid = document.getElementById("productsGrid");
 
@@ -66,6 +69,7 @@ fetch(productHandlerUrl)
         grid.innerHTML = html || "<p>Keine Produkte gefunden.</p>";
 }
 
+// Initialisiert die Suchfunktion für Produktliste (clientseitig)
 function setupSearch() {
     const searchInput = document.getElementById("productSearch");
     if (!searchInput) return;

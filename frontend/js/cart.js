@@ -1,9 +1,11 @@
+// cart.js — Warenkorb-Seite: Laden, Rendern und Aktionen (inkl. Coupon)
 console.log("cart.js wurde geladen")
 
 let couponDiscount = 0;
 
 const backendBaseUrl = "/404webshopnotfound/backend/logic/";
 
+// Sendet Cart-Aktionen (get/increase/decrease/clear) an das Backend
 function sendCartAction(action, id = null) {
 
     console.log("Cart Action:", action, id);
@@ -34,10 +36,12 @@ function sendCartAction(action, id = null) {
         });
 }
 
+// Lädt den aktuellen Warenkorb und rendert ihn
 function showCart() {
     sendCartAction("get");
 }
 
+// Rendert die Warenkorb-Ansicht (Items + Gesamt)
 function renderCart(cart) {
 
     const cartDiv = document.getElementById("cart");
@@ -121,6 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
     showCart();
 });
 
+// Handler für Coupon-Anwendung: fragt das Coupon-Backend an
 const applyCouponBtn = document.getElementById("applyCouponBtn");
 
 if (applyCouponBtn) {
@@ -146,6 +151,7 @@ if (applyCouponBtn) {
     });
 }
 
+// Prüft Login-Status und leitet zu Checkout oder Login weiter
 function goCheckout() {
 
     fetch(backendBaseUrl + "checkLogin.php", {
