@@ -6,6 +6,8 @@ const cartDrawerContent = document.getElementById("cartDrawerContent");
 
 const cartDrawerUrl =  "/404webshopnotfound/backend/logic/cartHandler.php"
 
+let currentCartCount = 0;
+
 function openCartDrawer() {
     cartDrawer.classList.add("active");
     cartOverlay.classList.add("active");
@@ -40,7 +42,17 @@ function loadCartDrawer() {
 }
 
 function renderCartDrawer(cart) {
+
+    currentCartCount = 0;
+
+    if (cart) {
+        cart.forEach(item => {
+            currentCartCount += parseInt(item.quantity);
+        });
+    }
+
     if (!cart || cart.length === 0) {
+
         cartDrawerContent.innerHTML = `
             <p class="cart-drawer-info">ⓘ Ihr Warenkorb ist leer.</p>
         `;
@@ -86,7 +98,11 @@ function renderCartDrawer(cart) {
         `;
     });
 
-    html += `<strong>Gesamt: ${total.toFixed(2)} €</strong>`;
+    html += `
+    <div class="cart-drawer-total">
+        <strong>Gesamt: ${total.toFixed(2)} €</strong>
+    </div>
+`;
 
     cartDrawerContent.innerHTML = html;
     updateCartCount(itemCount);
@@ -98,6 +114,24 @@ function updateCartCount(count) {
         cartCountElement.textContent = count;
         cartCountElement.style.display = count > 0 ? "inline-flex" : "none";
     }
+}
+function checkoutClick() {
+    const message = document.getElementById("checkoutMessage");
+    const countElement = document.getElementById("cartCount");
+    const count = countElement ? Number(countElement.textContent) : 0;
+
+    if (count <= 0) {
+        if (message) {
+            message.textContent = "Bitte füge zuerst Produkte zum Warenkorb hinzu.";
+        }
+        return;
+    }
+
+    if (message) {
+        message.textContent = "";
+    }
+
+    window.location.href = "/404webshopnotfound/frontend/sites/checkout.html";
 }
 
 if (cartDrawerBtn) {

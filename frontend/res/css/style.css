@@ -1228,22 +1228,40 @@
 
 .cart-drawer-checkout {
     width: 100%;
-    margin-top: 14px;
-    padding: 13px;
+    margin-top: 20px;
+    padding: 14px;
+    background: #000;
+    color: white;
     border: none;
     border-radius: 8px;
-    background: #f2f2f2;
-    color: #bbb;
-    font-weight: 800;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.cart-drawer-checkout:hover {
+    background: #333;
 }
 
 .cart-drawer-link {
     display: block;
-    margin-top: 14px;
+    margin-top: 16px;
     text-align: center;
+    font-weight: 700;
     color: #000;
-    font-weight: 800;
     text-decoration: underline;
+}
+
+.cart-drawer-total {
+    margin-top: 15px;
+    font-size: 18px;
+}
+
+.checkout-message {
+    margin-top: 10px;
+    text-align: center;
+    color: #c62828;
+    font-size: 14px;
+    min-height: 20px;
 }
 
 .cart-icon-btn {
